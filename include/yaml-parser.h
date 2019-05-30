@@ -1,8 +1,13 @@
-#ifdef YAML_PARSER_H
+#ifndef YAML_PARSER_H
 #define YAML_PARSER_H
 
-namespace YamlParser {
-    class Stream {};
-};
+#include <io-buffer.h>
+
+namespace YamlParser
+{
+    class Stream {
+        Stream(IOBuffer::IOReader *reader);
+    };
+} // YamlParser
 
 #endif /* YAML_PARSER_H */
