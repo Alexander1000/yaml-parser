@@ -28,6 +28,11 @@ set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS -fPIC)
 target_include_directories(${PROJECT_NAME} PRIVATE include)
 target_include_directories(${PROJECT_NAME} PRIVATE src)
 
+find_library(IO_BUFFER libio-buffer.a)
+message(STATUS "Found io-buffer library: ${IO_BUFFER}")
+
+target_link_libraries(${PROJECT_NAME} ${IO_BUFFER})
+
 install (TARGETS ${PROJECT_NAME}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
