@@ -4,6 +4,10 @@
 namespace YamlParser
 {
     Stream::Stream(IOBuffer::IOReader *reader) {
-        // do nothing
+        this->reader = reader;
+    }
+
+    void* Stream::getNextToken() {
+        return NULL;
     }
 }
