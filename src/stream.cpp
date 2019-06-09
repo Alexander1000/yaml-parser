@@ -8,6 +8,10 @@ namespace YamlParser
     }
 
     void* Stream::getNextToken() {
+        char* symbol = this->charStream->getNext();
+        if (symbol == NULL) {
+            return NULL;
+        }
         return NULL;
     }
 }
