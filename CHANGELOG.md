@@ -1,5 +1,5 @@
 # Changelog yaml parser
 
-## 2019-05-28
+## 0.0.1
 ### Added
   - initial commit

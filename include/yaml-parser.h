@@ -7,11 +7,11 @@ namespace YamlParser
 {
     class Stream {
     public:
-        Stream(IOBuffer::IOReader *reader);
+        Stream(IOBuffer::CharStream* charStream);
         void* getNextToken();
 
     private:
-        IOBuffer::IOReader* reader;
+        IOBuffer::CharStream* charStream;
     };
 } // YamlParser
 

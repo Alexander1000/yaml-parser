@@ -3,8 +3,8 @@
 
 namespace YamlParser
 {
-    Stream::Stream(IOBuffer::IOReader *reader) {
-        this->reader = reader;
+    Stream::Stream(IOBuffer::CharStream* charStream) {
+        this->charStream = charStream;
     }
 
     void* Stream::getNextToken() {
