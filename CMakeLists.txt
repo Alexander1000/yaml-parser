@@ -5,10 +5,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(YAML_PARSER_SOURCES
     src/stream.cpp
-)
-
-set(PUBLIC_HEADERS
-    include/yaml-parser.h
+    src/tokens/token.cpp
 )
 
 #----------------#
@@ -21,7 +18,7 @@ add_library(${PROJECT_NAME} STATIC ${YAML_PARSER_SOURCES})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION})
 set_target_properties(${PROJECT_NAME} PROPERTIES SOVERSION 1)
-set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER ${PUBLIC_HEADERS})
+set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER include/yaml-parser.h)
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "yaml-parser")
 set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS -fPIC)
 

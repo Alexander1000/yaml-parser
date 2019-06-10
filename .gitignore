@@ -5,3 +5,4 @@ CMakeCache.txt
 libyaml-parser.a
 Makefile
 yaml-parser.cbp
+install_manifest.txt
