@@ -6,12 +6,16 @@
 
 namespace YamlParser
 {
+    class InvalidStreamModeException
+    {};
+
     class Stream {
     public:
         Stream(IOBuffer::CharStream* charStream);
         Token::Token* getNextToken();
     private:
         IOBuffer::CharStream* charStream;
+        int mode;
     };
 } // YamlParser
 
