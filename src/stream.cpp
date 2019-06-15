@@ -5,6 +5,8 @@
 
 #define STREAM_MODE_PLAIN 0
 #define STREAM_MODE_VALUE 1
+#define STREAM_MODE_ARRAY_ELEMENT 2
+#define STREAM_MODE_TEXT_PLAIN 3
 
 namespace YamlParser
 {
@@ -35,29 +37,48 @@ namespace YamlParser
                     // skip empty strings
                     this->curSymbol = this->charStream->getNext();
                 }
+
                 if (this->curSymbol == NULL) {
                     return NULL;
                 }
+
                 if (isIndent(*this->curSymbol)) {
                     return this->parseIndentToken();
                 }
+
+                if (*this->curSymbol == '-') {
+                    this->mode = STREAM_MODE_ARRAY_ELEMENT;
+                    // todo: array
+                }
+
                 return this->parsePropertyToken();
+
             case STREAM_MODE_VALUE:
                 while (this->curSymbol != NULL && isIndent(*this->curSymbol)) {
                     this->curSymbol = this->charStream->getNext();
                 }
+
                 if (this->curSymbol == NULL) {
                     return NULL;
                 }
+
                 if (*this->curSymbol == '|') {
+                    this->mode = STREAM_MODE_TEXT_PLAIN;
                     // todo: parse plain text
                 }
+
                 if (*this->curSymbol == 0x0A || *this->curSymbol == 0x0D) {
                     this->mode = STREAM_MODE_PLAIN;
                     return this->getNextToken();
                 }
 
                 return this->parsePlainValueToken();
+
+            case STREAM_MODE_ARRAY_ELEMENT:
+                break;
+
+            case STREAM_MODE_TEXT_PLAIN:
+                break;
         }
 
         throw new InvalidStreamModeException;
