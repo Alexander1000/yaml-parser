@@ -116,8 +116,26 @@ namespace YamlParser
     Token::Token* Stream::parsePlainValueToken()
     {
         std::cout << "Call Stream::parsePlainValueToken()" << std::endl; // todo: remove after debug
+
         Token::Token* token = NULL;
-        return NULL;
+
+        // io buffer
+        IOBuffer::IOMemoryBuffer* ioMemoryBuffer;
+        ioMemoryBuffer = new IOBuffer::IOMemoryBuffer(16);
+
+        std::cout << "Parse value: "; // todo: remove after debug
+
+        while (this->curSymbol != NULL && *this->curSymbol != 0x0A && *this->curSymbol != 0x0D) {
+            std::cout << this->curSymbol[0]; // todo: remove after debug
+            ioMemoryBuffer->write(this->curSymbol, 1);
+            this->curSymbol = this->charStream->getNext();
+        }
+
+        std::cout << std::endl; // todo: remove after debug
+
+        token = new Token::PlainValueToken(this->currentLine, this->currentColumn, ioMemoryBuffer);
+        this->mode = STREAM_MODE_PLAIN;
+        return token;
     }
 
     bool Stream::isIndent(char symbol)
