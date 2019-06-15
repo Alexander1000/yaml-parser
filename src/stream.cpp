@@ -139,20 +139,4 @@ namespace YamlParser
     {
         return symbol == '\t' || symbol == 0x20;
     }
-
-    bool Stream::isPropertySymbol()
-    {
-        return isLetter(*this->curSymbol) || isDigit(*this->curSymbol);
-    }
-
-    bool Stream::isLetter(char symbol)
-    {
-        return (symbol >= 'a' && symbol <= 'z')
-            || (symbol >= 'A' && symbol <= 'Z');
-    }
-
-    bool Stream::isDigit(char symbol)
-    {
-        return symbol >= '0' && symbol <= '9';
-    }
 }
