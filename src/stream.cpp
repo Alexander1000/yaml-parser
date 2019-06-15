@@ -41,10 +41,7 @@ namespace YamlParser
                 if (isIndent(*this->curSymbol)) {
                     return this->parseIndentToken();
                 }
-                if (this->isPropertySymbol()) {
-                    return this->parsePropertyToken();
-                }
-                break;
+                return this->parsePropertyToken();
             case STREAM_MODE_VALUE:
                 while (this->curSymbol != NULL && isIndent(*this->curSymbol)) {
                     this->curSymbol = this->charStream->getNext();
@@ -61,11 +58,9 @@ namespace YamlParser
                 }
 
                 return this->parsePlainValueToken();
-            default:
-                throw new InvalidStreamModeException;
         }
 
-        return NULL;
+        throw new InvalidStreamModeException;
     }
 
     Token::Token* Stream::parseIndentToken()
