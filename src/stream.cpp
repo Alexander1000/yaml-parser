@@ -16,7 +16,7 @@ namespace YamlParser
         this->mode = STREAM_MODE_PLAIN;
         this->curSymbol = NULL;
         this->currentLine = 0;
-        this->currentColumn = 0;
+        this->currentColumn = -1;
     }
 
     Token::Token* Stream::getNextToken()
@@ -162,5 +162,19 @@ namespace YamlParser
     bool Stream::isIndent(char symbol)
     {
         return symbol == '\t' || symbol == 0x20;
+    }
+
+    char* Stream::getNextChar()
+    {
+        this->curSymbol = this->charStream->getNext();
+        if (this->curSymbol != NULL) {
+            if (*this->curSymbol == 0x0A || *this->curSymbol == 0x0D) {
+                this->currentLine++;
+                this->currentColumn = 0;
+            } else {
+                this->currentColumn++;
+            }
+        }
+        return this->curSymbol;
     }
 }
