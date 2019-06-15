@@ -7,7 +7,8 @@ namespace YamlParser::Token
 {
     enum Type {
         Space,
-        Property
+        Property,
+        PlainValue
     };
 
     class Token {
@@ -32,6 +33,12 @@ namespace YamlParser::Token
     class PropertyToken : public Token {
     public:
         PropertyToken(int line, int column, IOBuffer::IOReader *reader);
+        Type getType();
+    };
+
+    class PlainValueToken : public Token {
+    public:
+        PlainValueToken(int line, int column, IOBuffer::IOReader* reader);
         Type getType();
     };
 }

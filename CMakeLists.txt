@@ -8,6 +8,7 @@ set(YAML_PARSER_SOURCES
     src/tokens/token.cpp
     src/tokens/indent.cpp
     src/tokens/property.cpp
+    src/tokens/plain_value.cpp
 )
 
 if(NOT DEFINED CMAKE_INSTALL_INCLUDEDIR)

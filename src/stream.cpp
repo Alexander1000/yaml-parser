@@ -59,8 +59,7 @@ namespace YamlParser
                     // todo: parse nested or next
                 }
 
-                // todo: parse plain value
-                break;
+                return this->parsePlainValueToken();
             default:
                 throw new InvalidStreamModeException;
         }
@@ -112,6 +111,13 @@ namespace YamlParser
         token = new Token::PropertyToken(this->currentLine, this->currentColumn, ioWriter);
         this->mode = STREAM_MODE_VALUE;
         return token;
+    }
+
+    Token::Token* Stream::parsePlainValueToken()
+    {
+        std::cout << "Call Stream::parsePlainValueToken()" << std::endl; // todo: remove after debug
+        Token::Token* token = NULL;
+        return NULL;
     }
 
     bool Stream::isIndent(char symbol)
