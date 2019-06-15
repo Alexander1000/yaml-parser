@@ -55,8 +55,9 @@ namespace YamlParser
                 if (*this->curSymbol == '|') {
                     // todo: parse plain text
                 }
-                if (*this->curSymbol == 0x0A) {
-                    // todo: parse nested or next
+                if (*this->curSymbol == 0x0A || *this->curSymbol == 0x0D) {
+                    this->mode = STREAM_MODE_PLAIN;
+                    return this->getNextToken();
                 }
 
                 return this->parsePlainValueToken();
