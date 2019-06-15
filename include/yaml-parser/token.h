@@ -5,7 +5,9 @@
 
 namespace YamlParser::Token
 {
-    enum Type {};
+    enum Type {
+        Indent
+    };
 
     class Token {
     public:
@@ -18,6 +20,12 @@ namespace YamlParser::Token
         int line;
         int column;
         IOBuffer::IOReader *reader;
+    };
+
+    class Indent : public Token {
+    public:
+        Indent(int line, int column, IOBuffer::IOReader *reader);
+        Type getType();
     };
 }
 

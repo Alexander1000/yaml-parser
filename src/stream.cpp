@@ -25,7 +25,7 @@ namespace YamlParser
         switch (this->mode) {
             case STREAM_MODE_PLAIN:
                 if (this->isIndent()) {
-                    // todo: parse indent token
+                    return this->parseIndentToken();
                 }
                 if (this->isPropertySymbol()) {
                     // todo: parse property
@@ -36,6 +36,10 @@ namespace YamlParser
         }
 
         return NULL;
+    }
+
+    Token::Token* Stream::parseIndentToken()
+    {
     }
 
     bool Stream::isIndent()
