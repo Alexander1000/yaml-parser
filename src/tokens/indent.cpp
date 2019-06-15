@@ -7,6 +7,6 @@ namespace YamlParser::Token
     }
 
     Type Indent::getType() {
-        return Type::Indent;
+        return Type::Space;
     }
 } // YamlParser::Token

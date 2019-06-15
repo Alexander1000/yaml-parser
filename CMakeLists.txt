@@ -6,6 +6,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(YAML_PARSER_SOURCES
     src/stream.cpp
     src/tokens/token.cpp
+    src/tokens/indent.cpp
 )
 
 #----------------#

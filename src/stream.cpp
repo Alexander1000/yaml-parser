@@ -10,6 +10,8 @@ namespace YamlParser
         this->charStream = charStream;
         this->mode = STREAM_MODE_PLAIN;
         this->curSymbol = NULL;
+        this->currentLine = 0;
+        this->currentColumn = 0;
     }
 
     Token::Token* Stream::getNextToken()
@@ -40,11 +42,21 @@ namespace YamlParser
 
     Token::Token* Stream::parseIndentToken()
     {
+        Token::Token *token = NULL;
+        IOBuffer::IOMemoryBuffer ioWriter(10);
+
+        while (this->isIndent()) {
+            ioWriter.write(this->curSymbol, 1);
+            this->curSymbol = this->charStream->getNext();
+        }
+
+        token = new Token::Indent(this->currentLine, this->currentColumn, &ioWriter);
+        return token;
     }
 
     bool Stream::isIndent()
     {
-        return *this->curSymbol == '\t' || *this->curSymbol == 0x20;
+        return this->curSymbol != NULL && (*this->curSymbol == '\t' || *this->curSymbol == 0x20);
     }
 
     bool Stream::isPropertySymbol()

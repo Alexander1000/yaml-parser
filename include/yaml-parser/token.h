@@ -6,7 +6,7 @@
 namespace YamlParser::Token
 {
     enum Type {
-        Indent
+        Space
     };
 
     class Token {

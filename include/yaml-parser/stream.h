@@ -17,6 +17,12 @@ namespace YamlParser
         IOBuffer::CharStream* charStream;
         int mode;
         char* curSymbol;
+
+        // координаты токена в документе
+        int currentLine;
+        int currentColumn;
+
+        // methods
         bool isIndent();
         bool isPropertySymbol();
         Token::Token* parseIndentToken();
