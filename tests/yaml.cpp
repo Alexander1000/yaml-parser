@@ -16,13 +16,15 @@ int main(int argc, char** argv)
     do {
         token = yamlStream.getNextToken();
         if (token != NULL) {
+            std::cout << "Type: " << token->getType() << std::endl;
+
             IOBuffer::IOReader* reader = token->getReader();
 
-            memset(buffer, 1001, sizeof(char));
-            reader->read(buffer, 1000);
-
-            std::cout << "Type: " << token->getType() << std::endl;
-            std::cout << "Token: " << buffer << std::endl;
+            if (reader != NULL) {
+                memset(buffer, 1001, sizeof(char));
+                reader->read(buffer, 1000);
+                std::cout << "Token: " << buffer << std::endl;
+            }
         }
     } while(token != NULL);
 

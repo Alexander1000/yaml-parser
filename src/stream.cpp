@@ -31,6 +31,8 @@ namespace YamlParser
             return NULL;
         }
 
+        Token::Token* token = NULL;
+
         switch (this->mode) {
             case STREAM_MODE_PLAIN:
                 while (this->curSymbol != NULL && (*this->curSymbol == 0x0A || *this->curSymbol == 0x0D)) {
@@ -48,7 +50,8 @@ namespace YamlParser
 
                 if (*this->curSymbol == '-') {
                     this->mode = STREAM_MODE_ARRAY_ELEMENT;
-                    // todo: array
+                    token = new Token::DashToken(this->currentLine, this->currentColumn, NULL);
+                    return token;
                 }
 
                 return this->parsePropertyToken();
