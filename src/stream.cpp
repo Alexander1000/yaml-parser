@@ -2,6 +2,7 @@
 #include <io-buffer.h>
 
 #define STREAM_MODE_PLAIN 0
+#define STREAM_MODE_VALUE 1
 
 namespace YamlParser
 {
@@ -26,13 +27,14 @@ namespace YamlParser
 
         switch (this->mode) {
             case STREAM_MODE_PLAIN:
-                if (this->isIndent()) {
+                if (isIndent(*this->curSymbol)) {
                     return this->parseIndentToken();
                 }
                 if (this->isPropertySymbol()) {
                     return this->parsePropertyToken();
                 }
                 break;
+            case STREAM_MODE_VALUE:
             default:
                 throw new InvalidStreamModeException;
         }
@@ -45,7 +47,7 @@ namespace YamlParser
         Token::Token *token = NULL;
         IOBuffer::IOMemoryBuffer ioWriter(10);
 
-        while (this->isIndent()) {
+        while (isIndent(*this->curSymbol)) {
             ioWriter.write(this->curSymbol, 1);
             this->curSymbol = this->charStream->getNext();
         }
@@ -58,18 +60,21 @@ namespace YamlParser
     {
         Token::Token *token = NULL;
         IOBuffer::IOMemoryBuffer ioWriter(10);
-        while (!this->isIndent()) {
+        char* forwardSymbol = this->charStream->getNext();
+
+        while (*this->curSymbol != ':' && !isIndent(*forwardSymbol)) {
             ioWriter.write(this->curSymbol, 1);
-            this->curSymbol = this->charStream->getNext();
+            this->curSymbol = forwardSymbol;
         }
 
         token = new Token::PropertyToken(this->currentLine, this->currentColumn, &ioWriter);
+        this->mode = STREAM_MODE_VALUE;
         return token;
     }
 
-    bool Stream::isIndent()
+    bool Stream::isIndent(char symbol)
     {
-        return this->curSymbol != NULL && (*this->curSymbol == '\t' || *this->curSymbol == 0x20);
+        return symbol == '\t' || symbol == 0x20;
     }
 
     bool Stream::isPropertySymbol()

@@ -24,7 +24,7 @@ namespace YamlParser
 
         // methods
 
-        bool isIndent();
+        static bool isIndent(char symbol);
         bool isPropertySymbol();
 
         Token::Token* parseIndentToken();

@@ -5,3 +5,5 @@ userData:
   some/info: 'Test Information'
   key:value: value2
   :test: test
+  value with space: some test
+  spaced value:with comma: magic
