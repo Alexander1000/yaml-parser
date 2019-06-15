@@ -7,3 +7,32 @@ userData:
   :test: test
   value with space: some test
   spaced value:with comma: magic
+  nested:
+    someObject: some value
+    with eat nested:
+      update: 1
+      test: 2
+    previous: faaf
+  holla: test
+  it is array:
+    - test1
+    - test 2
+    - test 3
+    - name: ob1
+      property: holla
+      someValue:
+        hopp: chik
+        nested:
+          - arr
+          - 342
+        eat arr:
+          - property
+          - prop:
+              test: 324
+      someVar: 242f
+    - test4
+  someProperty: fasfs
+  test: |
+    kllk
+    klk;k;:
+  lklk: 342fs
