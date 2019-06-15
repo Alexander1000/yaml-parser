@@ -9,6 +9,13 @@ set(YAML_PARSER_SOURCES
     src/tokens/indent.cpp
 )
 
+if(NOT DEFINED CMAKE_INSTALL_INCLUDEDIR)
+    set(CMAKE_INSTALL_INCLUDEDIR include)
+endif(NOT DEFINED CMAKE_INSTALL_INCLUDEDIR)
+
+# installation of json-stream-analyzer CXX library headers
+install(DIRECTORY include/yaml-parser DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
 #----------------#
 # Static library #
 #----------------#

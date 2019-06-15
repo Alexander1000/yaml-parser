@@ -6,3 +6,4 @@ libyaml-parser.a
 Makefile
 yaml-parser.cbp
 install_manifest.txt
+tests/yaml-parser-tests

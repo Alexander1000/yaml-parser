@@ -12,3 +12,16 @@ rm -f Makefile
 cmake .
 make
 make install
+
+cd tests
+
+rm -rf CMakeFiles
+rm -f cmake_install.cmake
+rm -f CMakeCache.txt
+rm -f Makefile
+rm -f yaml-parser-tests
+
+cmake .
+make
+
+./yaml-parser-tests
