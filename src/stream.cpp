@@ -121,7 +121,17 @@ namespace YamlParser
 
     bool Stream::isPropertySymbol()
     {
-        return (*this->curSymbol >= 'a' && *this->curSymbol <= 'z')
-            || (*this->curSymbol >= 'A' && *this->curSymbol <= 'Z');
+        return isLetter(*this->curSymbol) || isDigit(*this->curSymbol);
+    }
+
+    bool Stream::isLetter(char symbol)
+    {
+        return (symbol >= 'a' && symbol <= 'z')
+            || (symbol >= 'A' && symbol <= 'Z');
+    }
+
+    bool Stream::isDigit(char symbol)
+    {
+        return symbol >= '0' && symbol <= '9';
     }
 }
