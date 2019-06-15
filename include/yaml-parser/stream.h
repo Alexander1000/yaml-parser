@@ -23,9 +23,12 @@ namespace YamlParser
         int currentColumn;
 
         // methods
+
         bool isIndent();
         bool isPropertySymbol();
+
         Token::Token* parseIndentToken();
+        Token::Token* parsePropertyToken();
     };
 } // YamlParser
 

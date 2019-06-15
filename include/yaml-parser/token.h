@@ -6,7 +6,8 @@
 namespace YamlParser::Token
 {
     enum Type {
-        Space
+        Space,
+        Property
     };
 
     class Token {
@@ -25,6 +26,12 @@ namespace YamlParser::Token
     class Indent : public Token {
     public:
         Indent(int line, int column, IOBuffer::IOReader *reader);
+        Type getType();
+    };
+
+    class PropertyToken : public Token {
+    public:
+        PropertyToken(int line, int column, IOBuffer::IOReader *reader);
         Type getType();
     };
 }

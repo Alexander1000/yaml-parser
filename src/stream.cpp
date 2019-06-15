@@ -30,7 +30,7 @@ namespace YamlParser
                     return this->parseIndentToken();
                 }
                 if (this->isPropertySymbol()) {
-                    // todo: parse property
+                    return this->parsePropertyToken();
                 }
                 break;
             default:
@@ -51,6 +51,19 @@ namespace YamlParser
         }
 
         token = new Token::Indent(this->currentLine, this->currentColumn, &ioWriter);
+        return token;
+    }
+
+    Token::Token* Stream::parsePropertyToken()
+    {
+        Token::Token *token = NULL;
+        IOBuffer::IOMemoryBuffer ioWriter(10);
+        while (!this->isIndent()) {
+            ioWriter.write(this->curSymbol, 1);
+            this->curSymbol = this->charStream->getNext();
+        }
+
+        token = new Token::PropertyToken(this->currentLine, this->currentColumn, &ioWriter);
         return token;
     }
 
