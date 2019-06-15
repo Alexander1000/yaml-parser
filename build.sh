@@ -24,4 +24,8 @@ rm -f yaml-parser-tests
 cmake .
 make
 
+echo
+echo "<== RUN TESTS ==>"
+echo
+
 ./yaml-parser-tests

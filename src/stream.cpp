@@ -1,6 +1,8 @@
 #include <yaml-parser/stream.h>
 #include <io-buffer.h>
 
+#include <iostream>
+
 #define STREAM_MODE_PLAIN 0
 #define STREAM_MODE_VALUE 1
 
@@ -17,6 +19,8 @@ namespace YamlParser
 
     Token::Token* Stream::getNextToken()
     {
+        std::cout << "Call Stream::getNextToken()" << std::endl;
+
         if (this->curSymbol == NULL) {
             this->curSymbol = this->charStream->getNext();
         }
@@ -51,6 +55,8 @@ namespace YamlParser
 
     Token::Token* Stream::parseIndentToken()
     {
+        std::cout << "Call Stream::parseIndentToken()" << std::endl; // todo: remove after debug
+
         Token::Token *token = NULL;
         IOBuffer::IOMemoryBuffer ioWriter(10);
 
@@ -65,16 +71,30 @@ namespace YamlParser
 
     Token::Token* Stream::parsePropertyToken()
     {
+        std::cout << "Call Stream::parsePropertyToken()" << std::endl; // todo: remove after debug
+
         Token::Token *token = NULL;
-        IOBuffer::IOMemoryBuffer ioWriter(10);
+
+        // io writer for token
+        IOBuffer::IOMemoryBuffer* ioWriter;
+        ioWriter = new IOBuffer::IOMemoryBuffer(16);
+
         char* forwardSymbol = this->charStream->getNext();
 
-        while (*this->curSymbol != ':' && !isIndent(*forwardSymbol)) {
-            ioWriter.write(this->curSymbol, 1);
+        std::cout << "Parse property: "; // todo: remove after debug
+
+        while (*this->curSymbol != ':' && !isIndent(*forwardSymbol) && *forwardSymbol != 0x0D && *forwardSymbol != 0x0A) {
+            std::cout << this->curSymbol[0]; // todo: remove after debug
+            ioWriter->write(this->curSymbol, 1);
             this->curSymbol = forwardSymbol;
+            forwardSymbol = this->charStream->getNext();
         }
 
-        token = new Token::PropertyToken(this->currentLine, this->currentColumn, &ioWriter);
+        std::cout << std::endl; // todo: remove after debug
+
+        this->curSymbol = forwardSymbol;
+
+        token = new Token::PropertyToken(this->currentLine, this->currentColumn, ioWriter);
         this->mode = STREAM_MODE_VALUE;
         return token;
     }

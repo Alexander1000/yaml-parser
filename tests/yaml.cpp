@@ -17,7 +17,8 @@ int main(int argc, char** argv)
         token = yamlStream.getNextToken();
         if (token != NULL) {
             IOBuffer::IOReader* reader = token->getReader();
-            memset(buffer, 0, sizeof(char) * 1001);
+
+            memset(buffer, 1001, sizeof(char));
             reader->read(buffer, 1000);
 
             std::cout << "Type: " << token->getType() << std::endl;
