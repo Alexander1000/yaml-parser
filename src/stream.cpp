@@ -1,4 +1,4 @@
-#include <yaml-parser.h>
+#include <yaml-parser/stream.h>
 #include <io-buffer.h>
 
 #define STREAM_MODE_PLAIN 0

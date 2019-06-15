@@ -7,6 +7,7 @@ set(YAML_PARSER_SOURCES
     src/stream.cpp
     src/tokens/token.cpp
     src/tokens/indent.cpp
+    src/tokens/property.cpp
 )
 
 if(NOT DEFINED CMAKE_INSTALL_INCLUDEDIR)

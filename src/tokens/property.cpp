@@ -6,7 +6,7 @@ namespace YamlParser::Token
     PropertyToken::PropertyToken(int line, int column, IOBuffer::IOReader *reader) : Token(line, column, reader) {
     }
 
-    Type Indent::getType() {
+    Type PropertyToken::getType() {
         return Type::Property;
     }
 } // YamlParser::Token
