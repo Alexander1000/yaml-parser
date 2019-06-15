@@ -9,21 +9,25 @@ namespace YamlParser
     {
         this->charStream = charStream;
         this->mode = STREAM_MODE_PLAIN;
+        this->curSymbol = NULL;
     }
 
     Token::Token* Stream::getNextToken()
     {
-        char* symbol = this->charStream->getNext();
-        if (symbol == NULL) {
+        if (this->curSymbol == NULL) {
+            this->curSymbol = this->charStream->getNext();
+        }
+
+        if (this->curSymbol == NULL) {
             return NULL;
         }
 
         switch (this->mode) {
             case STREAM_MODE_PLAIN:
-                if (isIndent(*symbol)) {
+                if (this->isIndent()) {
                     // todo: parse indent token
                 }
-                if (isPropertySymbol(*symbol)) {
+                if (this->isPropertySymbol()) {
                     // todo: parse property
                 }
                 break;
@@ -34,13 +38,14 @@ namespace YamlParser
         return NULL;
     }
 
-    bool Stream::isIndent(char symbol)
+    bool Stream::isIndent()
     {
-        return symbol == '\t' || symbol == 0x20;
+        return *this->curSymbol == '\t' || *this->curSymbol == 0x20;
     }
 
-    bool Stream::isPropertySymbol(char symbol)
+    bool Stream::isPropertySymbol()
     {
-        return (symbol >= 'a' && symbol <= 'z') || (symbol >= 'A' && symbol <= 'Z');
+        return (*this->curSymbol >= 'a' && *this->curSymbol <= 'z')
+            || (*this->curSymbol >= 'A' && *this->curSymbol <= 'Z');
     }
 }

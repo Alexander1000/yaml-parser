@@ -16,8 +16,10 @@ namespace YamlParser
     private:
         IOBuffer::CharStream* charStream;
         int mode;
-        static bool isIndent(char symbol);
-        static bool isPropertySymbol(char symbol);
+        char* curSymbol;
+        bool isIndent();
+        bool isPropertySymbol();
+        Token::Token* parseIndentToken();
     };
 } // YamlParser
 
