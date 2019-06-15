@@ -46,6 +46,21 @@ namespace YamlParser
                 }
                 break;
             case STREAM_MODE_VALUE:
+                while (this->curSymbol != NULL && isIndent(*this->curSymbol)) {
+                    this->curSymbol = this->charStream->getNext();
+                }
+                if (this->curSymbol == NULL) {
+                    return NULL;
+                }
+                if (*this->curSymbol == '|') {
+                    // todo: parse plain text
+                }
+                if (*this->curSymbol == 0x0A) {
+                    // todo: parse nested or next
+                }
+
+                // todo: parse plain value
+                break;
             default:
                 throw new InvalidStreamModeException;
         }
