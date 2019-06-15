@@ -73,14 +73,15 @@ namespace YamlParser
         std::cout << "Call Stream::parseIndentToken()" << std::endl; // todo: remove after debug
 
         Token::Token *token = NULL;
-        IOBuffer::IOMemoryBuffer ioWriter(10);
+        IOBuffer::IOMemoryBuffer* ioWriter;
+        ioWriter = new IOBuffer::IOMemoryBuffer(10);
 
         while (isIndent(*this->curSymbol)) {
-            ioWriter.write(this->curSymbol, 1);
+            ioWriter->write(this->curSymbol, 1);
             this->curSymbol = this->charStream->getNext();
         }
 
-        token = new Token::Indent(this->currentLine, this->currentColumn, &ioWriter);
+        token = new Token::Indent(this->currentLine, this->currentColumn, ioWriter);
         return token;
     }
 
