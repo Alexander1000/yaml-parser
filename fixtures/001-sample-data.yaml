@@ -18,7 +18,7 @@ userData:
   holla: test
   it is array:
     - test1
-    - test 2
+    - test 2: 999
     - test 3
     - name: ob1
       property: holla
