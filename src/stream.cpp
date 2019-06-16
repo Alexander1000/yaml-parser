@@ -53,6 +53,7 @@ namespace YamlParser
                 if (*this->curSymbol == '-') {
                     this->moveToMode(STREAM_MODE_ARRAY_ELEMENT);
                     token = new Token::DashToken(this->currentLine, this->currentColumn, NULL);
+                    this->curSymbol = this->getNextChar();
                     return token;
                 }
 
@@ -260,6 +261,8 @@ namespace YamlParser
             ioMemoryBuffer->write(this->curSymbol, 1);
             this->curSymbol = this->getNextChar();
         }
+
+        std::cout << std::endl; // todo: remove after debug
 
         if (colon) {
             token = new Token::PropertyToken(this->currentLine, this->currentColumn, ioMemoryBuffer);
