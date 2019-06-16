@@ -24,7 +24,7 @@ namespace YamlParser
         std::cout << "Call Stream::getNextToken()" << std::endl;
 
         if (this->curSymbol == NULL) {
-            this->curSymbol = this->charStream->getNext();
+            this->curSymbol = this->getNextChar();
         }
 
         if (this->curSymbol == NULL) {
@@ -37,7 +37,7 @@ namespace YamlParser
             case STREAM_MODE_PLAIN:
                 while (this->curSymbol != NULL && (*this->curSymbol == 0x0A || *this->curSymbol == 0x0D)) {
                     // skip empty strings
-                    this->curSymbol = this->charStream->getNext();
+                    this->curSymbol = this->getNextChar();
                 }
 
                 if (this->curSymbol == NULL) {
@@ -58,7 +58,7 @@ namespace YamlParser
 
             case STREAM_MODE_VALUE:
                 while (this->curSymbol != NULL && isIndent(*this->curSymbol)) {
-                    this->curSymbol = this->charStream->getNext();
+                    this->curSymbol = this->getNextChar();
                 }
 
                 if (this->curSymbol == NULL) {
@@ -97,7 +97,7 @@ namespace YamlParser
 
         while (isIndent(*this->curSymbol)) {
             ioWriter->write(this->curSymbol, 1);
-            this->curSymbol = this->charStream->getNext();
+            this->curSymbol = this->getNextChar();
         }
 
         token = new Token::Indent(this->currentLine, this->currentColumn, ioWriter);
@@ -114,7 +114,7 @@ namespace YamlParser
         IOBuffer::IOMemoryBuffer* ioWriter;
         ioWriter = new IOBuffer::IOMemoryBuffer(16);
 
-        char* forwardSymbol = this->charStream->getNext();
+        char* forwardSymbol = this->getNextChar();
 
         std::cout << "Parse property: "; // todo: remove after debug
 
@@ -122,7 +122,7 @@ namespace YamlParser
             std::cout << this->curSymbol[0]; // todo: remove after debug
             ioWriter->write(this->curSymbol, 1);
             this->curSymbol = forwardSymbol;
-            forwardSymbol = this->charStream->getNext();
+            forwardSymbol = this->getNextChar();
         }
 
         std::cout << std::endl; // todo: remove after debug
@@ -149,7 +149,7 @@ namespace YamlParser
         while (this->curSymbol != NULL && *this->curSymbol != 0x0A && *this->curSymbol != 0x0D) {
             std::cout << this->curSymbol[0]; // todo: remove after debug
             ioMemoryBuffer->write(this->curSymbol, 1);
-            this->curSymbol = this->charStream->getNext();
+            this->curSymbol = this->getNextChar();
         }
 
         std::cout << std::endl; // todo: remove after debug
@@ -166,15 +166,15 @@ namespace YamlParser
 
     char* Stream::getNextChar()
     {
-        this->curSymbol = this->charStream->getNext();
-        if (this->curSymbol != NULL) {
-            if (*this->curSymbol == 0x0A || *this->curSymbol == 0x0D) {
+        char* nextChar = this->charStream->getNext();
+        if (nextChar != NULL) {
+            if (*nextChar == 0x0A || *nextChar == 0x0D) {
                 this->currentLine++;
                 this->currentColumn = 0;
             } else {
                 this->currentColumn++;
             }
         }
-        return this->curSymbol;
+        return nextChar;
     }
 }
