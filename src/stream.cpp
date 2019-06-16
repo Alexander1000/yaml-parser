@@ -14,6 +14,7 @@ namespace YamlParser
     {
         this->charStream = charStream;
         this->mode = STREAM_MODE_PLAIN;
+        this->prevMode = STREAM_MODE_PLAIN;
         this->curSymbol = NULL;
         this->currentLine = 0;
         this->currentColumn = -1;
@@ -49,7 +50,7 @@ namespace YamlParser
                 }
 
                 if (*this->curSymbol == '-') {
-                    this->mode = STREAM_MODE_ARRAY_ELEMENT;
+                    this->moveToMode(STREAM_MODE_ARRAY_ELEMENT);
                     token = new Token::DashToken(this->currentLine, this->currentColumn, NULL);
                     return token;
                 }
@@ -66,12 +67,12 @@ namespace YamlParser
                 }
 
                 if (*this->curSymbol == '|') {
-                    this->mode = STREAM_MODE_TEXT_PLAIN;
+                    this->moveToMode(STREAM_MODE_TEXT_PLAIN);
                     // todo: parse plain text
                 }
 
                 if (*this->curSymbol == 0x0A || *this->curSymbol == 0x0D) {
-                    this->mode = STREAM_MODE_PLAIN;
+                    this->moveToMode(STREAM_MODE_PLAIN);
                     return this->getNextToken();
                 }
 
@@ -130,7 +131,7 @@ namespace YamlParser
         this->curSymbol = forwardSymbol;
 
         token = new Token::PropertyToken(this->currentLine, this->currentColumn, ioWriter);
-        this->mode = STREAM_MODE_VALUE;
+        this->moveToMode(STREAM_MODE_VALUE);
         return token;
     }
 
@@ -155,7 +156,7 @@ namespace YamlParser
         std::cout << std::endl; // todo: remove after debug
 
         token = new Token::PlainValueToken(this->currentLine, this->currentColumn, ioMemoryBuffer);
-        this->mode = STREAM_MODE_PLAIN;
+        this->moveToMode(STREAM_MODE_PLAIN);
         return token;
     }
 
@@ -176,5 +177,11 @@ namespace YamlParser
             }
         }
         return nextChar;
+    }
+
+    void Stream::moveToMode(int nextMode)
+    {
+        this->prevMode = this->mode;
+        this->mode = nextMode;
     }
 }

@@ -16,6 +16,7 @@ namespace YamlParser
     private:
         IOBuffer::CharStream* charStream;
         int mode;
+        int prevMode;
         char* curSymbol;
 
         // координаты токена в документе
@@ -31,6 +32,8 @@ namespace YamlParser
         Token::Token* parsePlainValueToken();
 
         char* getNextChar();
+
+        void moveToMode(int mode);
     };
 } // YamlParser
 
