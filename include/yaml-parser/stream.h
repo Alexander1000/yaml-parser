@@ -32,6 +32,7 @@ namespace YamlParser
         Token::Token* parsePropertyToken();
         Token::Token* parsePlainValueToken();
         Token::Token* parseArrayElementToken();
+        Token::Token* parsePlainTextToken();
 
         char* getNextChar();
 

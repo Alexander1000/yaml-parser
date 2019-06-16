@@ -100,7 +100,8 @@ namespace YamlParser
                     // skip empty strings
                     this->curSymbol = this->getNextChar();
                 }
-                break;
+
+                return this->parsePlainTextToken();
         }
 
         throw new InvalidStreamModeException;
@@ -228,6 +229,12 @@ namespace YamlParser
             this->moveToMode(STREAM_MODE_PLAIN);
         }
 
+        return token;
+    }
+
+    Token::Token* Stream::parsePlainTextToken()
+    {
+        Token::Token* token = NULL;
         return token;
     }
 
