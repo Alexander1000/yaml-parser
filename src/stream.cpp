@@ -18,6 +18,7 @@ namespace YamlParser
         this->curSymbol = NULL;
         this->currentLine = 0;
         this->currentColumn = -1;
+        this->lastIndent = 0;
     }
 
     Token::Token* Stream::getNextToken()
@@ -91,6 +92,14 @@ namespace YamlParser
                 return this->parseArrayElementToken();
 
             case STREAM_MODE_TEXT_PLAIN:
+                while (this->curSymbol != NULL && isIndent(*this->curSymbol)) {
+                    // skip empty strings
+                    this->curSymbol = this->getNextChar();
+                }
+                while (this->curSymbol != NULL && (*this->curSymbol == 0x0A || *this->curSymbol == 0x0D)) {
+                    // skip empty strings
+                    this->curSymbol = this->getNextChar();
+                }
                 break;
         }
 
@@ -118,6 +127,11 @@ namespace YamlParser
     {
         std::cout << "Call Stream::parsePropertyToken()" << std::endl; // todo: remove after debug
 
+        int tokenLine = this->currentLine;
+        int tokenColumn = this->currentColumn;
+
+        this->lastIndent = this->currentColumn;
+
         Token::Token *token = NULL;
 
         // io writer for token
@@ -139,7 +153,7 @@ namespace YamlParser
 
         this->curSymbol = forwardSymbol;
 
-        token = new Token::PropertyToken(this->currentLine, this->currentColumn, ioWriter);
+        token = new Token::PropertyToken(tokenLine, tokenColumn, ioWriter);
         this->moveToMode(STREAM_MODE_VALUE);
         return token;
     }

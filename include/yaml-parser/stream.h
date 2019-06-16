@@ -18,6 +18,7 @@ namespace YamlParser
         int mode;
         int prevMode;
         char* curSymbol;
+        int lastIndent;
 
         // координаты токена в документе
         int currentLine;
