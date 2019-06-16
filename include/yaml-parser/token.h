@@ -9,7 +9,8 @@ namespace YamlParser::Token
         Space,
         Property,
         PlainValue,
-        Dash
+        Dash,
+        Pipe
     };
 
     class Token {
@@ -46,6 +47,12 @@ namespace YamlParser::Token
     class DashToken : public Token {
     public:
         DashToken(int line, int column, IOBuffer::IOReader* reader);
+        Type getType();
+    };
+
+    class PipeToken : public Token {
+    public:
+        PipeToken(int line, int column, IOBuffer::IOReader* reader);
         Type getType();
     };
 }

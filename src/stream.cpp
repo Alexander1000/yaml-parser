@@ -68,7 +68,8 @@ namespace YamlParser
 
                 if (*this->curSymbol == '|') {
                     this->moveToMode(STREAM_MODE_TEXT_PLAIN);
-                    // todo: parse plain text
+                    token = new Token::PipeToken(this->currentLine, this->currentColumn, NULL);
+                    return token;
                 }
 
                 if (*this->curSymbol == 0x0A || *this->curSymbol == 0x0D) {
