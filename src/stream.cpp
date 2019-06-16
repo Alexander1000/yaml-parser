@@ -79,7 +79,15 @@ namespace YamlParser
                 return this->parsePlainValueToken();
 
             case STREAM_MODE_ARRAY_ELEMENT:
-                break;
+                while (this->curSymbol != NULL && isIndent(*this->curSymbol)) {
+                    this->curSymbol = this->getNextChar();
+                }
+
+                if (this->curSymbol == NULL) {
+                    return NULL;
+                }
+
+                return this->parseArrayElementToken();
 
             case STREAM_MODE_TEXT_PLAIN:
                 break;
@@ -157,6 +165,12 @@ namespace YamlParser
 
         token = new Token::PlainValueToken(this->currentLine, this->currentColumn, ioMemoryBuffer);
         this->moveToMode(STREAM_MODE_PLAIN);
+        return token;
+    }
+
+    Token::Token* Stream::parseArrayElementToken()
+    {
+        Token::Token* token = NULL;
         return token;
     }
 
