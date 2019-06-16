@@ -148,13 +148,10 @@ namespace YamlParser
 
         // io writer for token
         IOBuffer::IOMemoryBuffer* ioWriter;
-        ioWriter = new IOBuffer::IOMemoryBuffer(16);
-
-        // char* forwardSymbol = this->getNextChar();
+        ioWriter = new IOBuffer::IOMemoryBuffer(32);
 
         std::cout << "Parse property: "; // todo: remove after debug
 
-        char chColon = ':';
         bool colon = false;
 
         while (this->curSymbol != NULL && *this->curSymbol != 0x0A && *this->curSymbol != 0x0D) {
@@ -162,7 +159,7 @@ namespace YamlParser
 
             if (*this->curSymbol == ':') {
                 if (colon) {
-                    ioWriter->write(&chColon, 1);
+                    ioWriter->write(this->curSymbol-1, 1);
                 }
                 colon = true;
                 this->curSymbol = this->getNextChar();
@@ -170,7 +167,7 @@ namespace YamlParser
             }
 
             if (colon && !isIndent(*this->curSymbol)) {
-                ioWriter->write(&chColon, 1);
+                ioWriter->write(this->curSymbol-1, 1);
                 colon = false;
             }
 
@@ -182,16 +179,7 @@ namespace YamlParser
             this->curSymbol = this->getNextChar();
         }
 
-//        while (*this->curSymbol != ':' && !isIndent(*forwardSymbol) && *forwardSymbol != 0x0D && *forwardSymbol != 0x0A) {
-//            std::cout << this->curSymbol[0]; // todo: remove after debug
-//            ioWriter->write(this->curSymbol, 1);
-//            this->curSymbol = forwardSymbol;
-//            forwardSymbol = this->getNextChar();
-//        }
-
         std::cout << std::endl; // todo: remove after debug
-
-        // this->curSymbol = forwardSymbol;
 
         token = new Token::PropertyToken(tokenLine, tokenColumn, ioWriter);
         this->moveToMode(STREAM_MODE_VALUE);
