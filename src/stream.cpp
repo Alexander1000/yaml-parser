@@ -78,7 +78,9 @@ namespace YamlParser
                     return this->getNextToken();
                 }
 
-                return this->parsePlainValueToken();
+                token = this->parsePlainValueToken();
+                this->moveToMode(STREAM_MODE_PLAIN);
+                return token;
 
             case STREAM_MODE_ARRAY_ELEMENT:
                 while (this->curSymbol != NULL && isIndent(*this->curSymbol)) {
@@ -101,7 +103,15 @@ namespace YamlParser
                     this->curSymbol = this->getNextChar();
                 }
 
-                return this->parsePlainTextToken();
+                if (isIndent(*this->curSymbol)) {
+                    token = this->parseIndentToken();
+                    if (((IOBuffer::IOMemoryBuffer*) token)->length() <= this->lastIndent) {
+                        this->moveToMode(STREAM_MODE_PLAIN);
+                    }
+                    return token;
+                }
+
+                return this->parsePlainValueToken();
         }
 
         throw new InvalidStreamModeException;
@@ -180,7 +190,6 @@ namespace YamlParser
         std::cout << std::endl; // todo: remove after debug
 
         token = new Token::PlainValueToken(this->currentLine, this->currentColumn, ioMemoryBuffer);
-        this->moveToMode(STREAM_MODE_PLAIN);
         return token;
     }
 
@@ -229,12 +238,6 @@ namespace YamlParser
             this->moveToMode(STREAM_MODE_PLAIN);
         }
 
-        return token;
-    }
-
-    Token::Token* Stream::parsePlainTextToken()
-    {
-        Token::Token* token = NULL;
         return token;
     }
 
