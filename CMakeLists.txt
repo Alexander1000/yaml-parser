@@ -11,6 +11,7 @@ set(YAML_PARSER_SOURCES
     src/tokens/plain_value.cpp
     src/tokens/dash.cpp
     src/tokens/pipe.cpp
+    src/decoder.cpp
 )
 
 if(NOT DEFINED CMAKE_INSTALL_INCLUDEDIR)
