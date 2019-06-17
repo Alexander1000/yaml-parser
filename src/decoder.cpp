@@ -1,9 +1,10 @@
 #include <yaml-parser/decoder.h>
+#include <yaml-parser/stream.h>
 
 namespace YamlParser
 {
-    Decoder::Decoder()
+    Decoder::Decoder(Stream* stream)
     {
-        // init
+        this->stream = stream;
     }
 }
