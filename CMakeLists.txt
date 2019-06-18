@@ -12,6 +12,7 @@ set(YAML_PARSER_SOURCES
     src/tokens/dash.cpp
     src/tokens/pipe.cpp
     src/decoder.cpp
+    src/element.cpp
 )
 
 if(NOT DEFINED CMAKE_INSTALL_INCLUDEDIR)

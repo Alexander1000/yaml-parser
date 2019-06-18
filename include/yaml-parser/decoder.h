@@ -9,6 +9,7 @@ namespace YamlParser
     {
     public:
         Decoder(Stream* stream);
+        void* parse();
     private:
         Stream* stream;
     };

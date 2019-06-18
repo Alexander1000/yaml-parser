@@ -7,4 +7,8 @@ namespace YamlParser
     {
         this->stream = stream;
     }
+
+    void* Decoder::parse()
+    {
+    }
 }
