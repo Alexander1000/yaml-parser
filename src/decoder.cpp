@@ -3,6 +3,7 @@
 #include <yaml-parser/decoder.h>
 #include <yaml-parser/stream.h>
 #include <yaml-parser/element.h>
+#include <yaml-parser/token.h>
 
 namespace YamlParser
 {
@@ -16,8 +17,14 @@ namespace YamlParser
         return NULL;
     }
 
-    std::map<std::string, Element*>* parse_object()
+    std::map<std::string, Element*>* Decoder::parse_object()
     {
-        return NULL;
+        std::map<std::string, Element*>* object;
+        object = new std::map<std::string, Element*>;
+
+        Token::Token* token = NULL;
+        token = this->stream->getNextToken();
+
+        return object;
     }
 }
