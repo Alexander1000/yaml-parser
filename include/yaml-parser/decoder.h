@@ -2,6 +2,7 @@
 #define YAML_PARSER_DECODER_H
 
 #include <yaml-parser/stream.h>
+#include <yaml-parser/element.h>
 
 namespace YamlParser
 {
@@ -9,7 +10,7 @@ namespace YamlParser
     {
     public:
         Decoder(Stream* stream);
-        void* parse();
+        Element* parse();
     private:
         Stream* stream;
     };

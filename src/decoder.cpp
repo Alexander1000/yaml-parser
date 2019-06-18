@@ -1,5 +1,6 @@
 #include <yaml-parser/decoder.h>
 #include <yaml-parser/stream.h>
+#include <yaml-parser/element.h>
 
 namespace YamlParser
 {
@@ -8,7 +9,8 @@ namespace YamlParser
         this->stream = stream;
     }
 
-    void* Decoder::parse()
+    Element* Decoder::parse()
     {
+        return NULL;
     }
 }
