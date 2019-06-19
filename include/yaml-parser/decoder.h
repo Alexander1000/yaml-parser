@@ -16,6 +16,7 @@ namespace YamlParser
     private:
         Stream* stream;
 
+        Element* parse_element();
         std::map<std::string, Element*>* parse_object();
     };
 }

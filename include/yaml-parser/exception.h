@@ -3,6 +3,8 @@
 
 namespace YamlParser
 {
+    class UnexpectedTokenException
+    {};
 }
 
 #endif /* YAML_PARSER_EXCEPTION_H */

@@ -4,6 +4,7 @@
 #include <yaml-parser/stream.h>
 #include <yaml-parser/element.h>
 #include <yaml-parser/token.h>
+#include <yaml-parser/exception.h>
 
 namespace YamlParser
 {
@@ -17,6 +18,11 @@ namespace YamlParser
         return NULL;
     }
 
+    Element* Decoder::parse_element()
+    {
+        return NULL;
+    }
+
     std::map<std::string, Element*>* Decoder::parse_object()
     {
         std::map<std::string, Element*>* object;
@@ -24,6 +30,10 @@ namespace YamlParser
 
         Token::Token* token = NULL;
         token = this->stream->getNextToken();
+
+        if (token == NULL || token->getType() != Token::Type::Property) {
+            throw new UnexpectedTokenException;
+        }
 
         return object;
     }
