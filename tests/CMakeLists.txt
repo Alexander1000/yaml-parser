@@ -12,9 +12,13 @@ message(STATUS "Found yaml-parser library: ${YAML_PARSER}")
 find_library(IO_BUFFER libio-buffer.a)
 message(STATUS "Found io-buffer library: ${IO_BUFFER}")
 
+find_library(CPP_UNIT_TEST libcpp-unit-test.a)
+message(STATUS "Found cpp-unit-test: ${CPP_UNIT_TEST}")
+
 add_executable(${PROJECT_NAME} yaml.cpp)
 
 target_link_libraries(${PROJECT_NAME}
     ${YAML_PARSER}
     ${IO_BUFFER}
+    ${CPP_UNIT_TEST}
 )
