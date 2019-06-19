@@ -1,3 +1,4 @@
+#include <iostream>
 #include <map>
 
 #include <yaml-parser/decoder.h>
@@ -34,6 +35,12 @@ namespace YamlParser
         if (token == NULL || token->getType() != Token::Type::Property) {
             throw new UnexpectedTokenException;
         }
+
+        char* propertyName = (char*) malloc(sizeof(char) * 1001);
+        memset(propertyName, 1001, sizeof(char));
+        token->getReader()->read(propertyName, 1000);
+
+        std::cout << "property.name: " << propertyName << std::endl;
 
         return object;
     }
