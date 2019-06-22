@@ -18,6 +18,7 @@ namespace YamlParser
 
         Element* parse_element();
         std::map<std::string, Element*>* parse_object();
+        std::map<std::string, Element*>* parse_object(Token::Token* token);
     };
 }
 
