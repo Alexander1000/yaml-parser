@@ -8,7 +8,8 @@
 class AssertElementTypeException
 {};
 
-void assertElementType(CppUnitTest::TestCase* t, YamlParser::Element* element, YamlParser::ElementType type) {
+void assertElementType(CppUnitTest::TestCase* t, YamlParser::Element* element, YamlParser::ElementType type)
+{
     t->increment();
 
     if (element->getType() != type) {
@@ -43,6 +44,8 @@ int main(int argc, char** argv)
     testSuite.addTestCase(testDecodeObject_YamlData_Positive());
 
     testSuite.printTotal();
+
+    std::cout << "==========================" << std::endl;
 
     IOBuffer::IOFileReader fileReader("../fixtures/001-sample-data.yaml");
     IOBuffer::CharStream charStream(&fileReader);
