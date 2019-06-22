@@ -9,6 +9,8 @@ namespace YamlParser
         ListType
     };
 
+    const char* getElementTypeName(ElementType);
+
     class Element
     {
     public:

@@ -17,4 +17,15 @@ namespace YamlParser
     {
         return this->data;
     }
+
+    const char* getElementTypeName(ElementType type) {
+        switch (type) {
+            case ElementType::ListType:
+                return "list";
+            case ElementType::PlainTextType:
+                return "text";
+            case ElementType ::ObjectType:
+                return "object";
+        }
+    }
 }

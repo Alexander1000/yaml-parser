@@ -5,6 +5,18 @@
 #include <yaml-parser.h>
 #include <cpp-unit-test.h>
 
+class AssertElementTypeException
+{};
+
+void assertElementType(CppUnitTest::TestCase* t, YamlParser::Element* element, YamlParser::ElementType type) {
+    t->increment();
+
+    if (element->getType() != type) {
+        std::cout << "Expected element" << YamlParser::getElementTypeName(type) << ", but: " << YamlParser::getElementTypeName(element->getType()) << std::endl;
+        throw new AssertElementTypeException;
+    }
+}
+
 CppUnitTest::TestCase* testDecodeObject_YamlData_Positive()
 {
     CppUnitTest::TestCase* t = new CppUnitTest::TestCase("001-samle-data");
@@ -15,7 +27,8 @@ CppUnitTest::TestCase* testDecodeObject_YamlData_Positive()
     YamlParser::Stream yamlStream(&charStream);
     YamlParser::Decoder decoder(&yamlStream);
 
-    decoder.parse();
+    YamlParser::Element* rElement = decoder.parse();
+    assertElementType(t, rElement, YamlParser::ElementType::ObjectType);
 
     // todo: make tests
 
