@@ -1,5 +1,6 @@
 #include <iostream>
 #include <map>
+#include <string>
 
 #include <yaml-parser/decoder.h>
 #include <yaml-parser/stream.h>
@@ -30,11 +31,18 @@ namespace YamlParser
 
         Element* element;
         std::map<std::string, Element*>* object;
+        char* plainValue;
 
         switch (token->getType()) {
             case Token::Type::Property:
                 object = this->parse_object(token);
                 element = new Element(ElementType::ObjectType, object);
+                break;
+            case Token::Type::PlainValue:
+                plainValue = (char*) malloc(1001 * sizeof(char));
+                memset(plainValue, 0, sizeof(char) * 1001);
+                token->getReader()->read(plainValue, 1000);
+                element = new Element(ElementType::PlainTextType, plainValue);
                 break;
             default:
                 std::cout << "Unexpected token type: " << Token::tokenTypeName(token->getType()) << std::endl;
@@ -65,6 +73,8 @@ namespace YamlParser
         std::cout << "property.name: " << propertyName << std::endl;
 
         Element* element = this->parse_element();
+
+        (*object)[std::string(propertyName)] = element;
 
         return object;
     }
