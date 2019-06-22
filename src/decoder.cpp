@@ -62,14 +62,16 @@ namespace YamlParser
 
     std::map<std::string, Element*>* Decoder::parse_object(Token::Token* token)
     {
+        std::map<std::string, Element*>* object;
+        object = new std::map<std::string, Element*>;
+        char* propertyName;
+
+        PARSE_PAIR:
         if (token == NULL || token->getType() != Token::Type::Property) {
             throw new UnexpectedTokenException;
         }
 
-        std::map<std::string, Element*>* object;
-        object = new std::map<std::string, Element*>;
-
-        char* propertyName = (char*) malloc(sizeof(char) * 1001);
+        propertyName = (char*) malloc(sizeof(char) * 1001);
         memset(propertyName, 0, 1001 * sizeof(char));
         token->getReader()->read(propertyName, 1000);
 
@@ -78,6 +80,18 @@ namespace YamlParser
         Element* element = this->parse_element();
 
         (*object)[std::string(propertyName)] = element;
+
+        token = this->getNextToken();
+        if (token != NULL) {
+            switch (token->getType()) {
+                case Token::Type::Property:
+                    // parse next key-value pair
+                    goto PARSE_PAIR;
+                default:
+                    this->tokenStack->push(token);
+                    break;
+            }
+        }
 
         return object;
     }
