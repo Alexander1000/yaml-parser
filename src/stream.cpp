@@ -47,6 +47,7 @@ namespace YamlParser
                 }
 
                 if (isIndent(*this->curSymbol)) {
+                    std::cout << "Mode: plain" << std::endl;
                     return this->parseIndentToken();
                 }
 
@@ -105,6 +106,7 @@ namespace YamlParser
                 }
 
                 if (isIndent(*this->curSymbol)) {
+                    std::cout << "Mode: text" << std::endl;
                     token = this->parseIndentToken();
                     if (((IOBuffer::IOMemoryBuffer*) token->getReader())->length() <= this->lastIndent) {
                         this->moveToMode(STREAM_MODE_PLAIN);
@@ -126,12 +128,21 @@ namespace YamlParser
         IOBuffer::IOMemoryBuffer* ioWriter;
         ioWriter = new IOBuffer::IOMemoryBuffer(10);
 
+        int curLine = this->currentLine, curColumn = this->currentColumn;
+
+        std::cout << "Coords: (" << curLine << "; " << curColumn << ")" << std::endl;
+
+        std::cout << "Spaces: ";
+
         while (isIndent(*this->curSymbol)) {
             ioWriter->write(this->curSymbol, 1);
             this->curSymbol = this->getNextChar();
+            std::cout << (int) *this->curSymbol << " ";
         }
 
-        token = new Token::Indent(this->currentLine, this->currentColumn, ioWriter);
+        std::cout << std::endl;
+
+        token = new Token::Indent(curLine, curColumn, ioWriter);
         return token;
     }
 
