@@ -35,6 +35,7 @@ namespace YamlParser
         Element* element;
         std::map<std::string, Element*>* object;
         char* plainValue;
+        IOBuffer::IOMemoryBuffer* memoryBuffer;
 
         switch (token->getType()) {
             case Token::Type::Property:
@@ -46,6 +47,11 @@ namespace YamlParser
                 memset(plainValue, 0, sizeof(char) * 1001);
                 token->getReader()->read(plainValue, 1000);
                 element = new Element(ElementType::PlainTextType, plainValue);
+                break;
+            case Token::Type::Space:
+                memoryBuffer = (IOBuffer::IOMemoryBuffer*) token->getReader();
+                this->indent->push_back(memoryBuffer->length());
+                element = this->parse_element();
                 break;
             default:
                 std::cout << "Unexpected token type: " << Token::tokenTypeName(token->getType()) << std::endl;
@@ -81,11 +87,21 @@ namespace YamlParser
 
         (*object)[std::string(propertyName)] = element;
 
+        IOBuffer::IOMemoryBuffer* memoryBuffer;
+
         token = this->getNextToken();
         if (token != NULL) {
             switch (token->getType()) {
                 case Token::Type::Property:
                     // parse next key-value pair
+                    goto PARSE_PAIR;
+                case Token::Type::Space:
+                    memoryBuffer = (IOBuffer::IOMemoryBuffer*) token->getReader();
+                    if (memoryBuffer->length() != *this->indent->end()) {
+                        this->tokenStack->push(token);
+                        break;
+                    }
+                    token = this->getNextToken();
                     goto PARSE_PAIR;
                 default:
                     this->tokenStack->push(token);
