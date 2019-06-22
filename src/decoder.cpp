@@ -16,6 +16,7 @@ namespace YamlParser
     {
         this->stream = stream;
         this->indent->push_back(0);
+        this->tokenStack = new std::stack<Token::Token*>;
     }
 
     Element* Decoder::parse()
@@ -25,6 +26,8 @@ namespace YamlParser
 
     Element* Decoder::parse_element()
     {
+        std::cout << "Call Decoder::parse_element()" << std::endl;
+
         Token::Token* token = NULL;
         token = this->getNextToken();
 
@@ -39,16 +42,22 @@ namespace YamlParser
 
         switch (token->getType()) {
             case Token::Type::Property:
+                std::cout << "Call Decoder::parse_element() [property]" << std::endl;
+
                 object = this->parse_object(token);
                 element = new Element(ElementType::ObjectType, object);
                 break;
             case Token::Type::PlainValue:
+                std::cout << "Call Decoder::parse_element() [plain.value]" << std::endl;
+
                 plainValue = (char*) malloc(1001 * sizeof(char));
                 memset(plainValue, 0, sizeof(char) * 1001);
                 token->getReader()->read(plainValue, 1000);
                 element = new Element(ElementType::PlainTextType, plainValue);
                 break;
             case Token::Type::Space:
+                std::cout << "Call Decoder::parse_element() [space]" << std::endl;
+
                 memoryBuffer = (IOBuffer::IOMemoryBuffer*) token->getReader();
                 this->indent->push_back(memoryBuffer->length());
                 element = this->parse_element();
@@ -96,13 +105,19 @@ namespace YamlParser
                     // parse next key-value pair
                     goto PARSE_PAIR;
                 case Token::Type::Space:
+                    std::cout << "indent in property" << std::endl;
                     memoryBuffer = (IOBuffer::IOMemoryBuffer*) token->getReader();
-                    if (memoryBuffer->length() != *this->indent->end()) {
-                        this->tokenStack->push(token);
-                        break;
+                    std::cout << "length indent: " << memoryBuffer->length() << std::endl;
+                    std::cout << "parent length: " << this->indent->back() << std::endl;
+
+                    if (memoryBuffer->length() == this->indent->back()) {
+                        token = this->getNextToken();
+                        goto PARSE_PAIR;
                     }
-                    token = this->getNextToken();
-                    goto PARSE_PAIR;
+
+                    this->tokenStack->push(token);
+
+                    break;
                 default:
                     this->tokenStack->push(token);
                     break;
