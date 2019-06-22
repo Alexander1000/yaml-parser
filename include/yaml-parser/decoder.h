@@ -3,6 +3,7 @@
 
 #include <map>
 #include <list>
+#include <stack>
 
 #include <yaml-parser/stream.h>
 #include <yaml-parser/element.h>
@@ -17,6 +18,10 @@ namespace YamlParser
     private:
         Stream* stream;
         std::list<int>* indent;
+        std::stack<Token::Token*>* tokenStack;
+
+        void pushToken(Token::Token*);
+        Token::Token* getNextToken();
 
         Element* parse_element();
         std::map<std::string, Element*>* parse_object();

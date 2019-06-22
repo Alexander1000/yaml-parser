@@ -2,6 +2,7 @@
 #include <map>
 #include <string>
 #include <list>
+#include <stack>
 
 #include <yaml-parser/decoder.h>
 #include <yaml-parser/stream.h>
@@ -25,7 +26,7 @@ namespace YamlParser
     Element* Decoder::parse_element()
     {
         Token::Token* token = NULL;
-        token = this->stream->getNextToken();
+        token = this->getNextToken();
 
         if (token == NULL) {
             return NULL;
@@ -56,7 +57,7 @@ namespace YamlParser
 
     std::map<std::string, Element*>* Decoder::parse_object()
     {
-        return this->parse_object(this->stream->getNextToken());
+        return this->parse_object(this->getNextToken());
     }
 
     std::map<std::string, Element*>* Decoder::parse_object(Token::Token* token)
@@ -79,5 +80,19 @@ namespace YamlParser
         (*object)[std::string(propertyName)] = element;
 
         return object;
+    }
+
+    Token::Token* Decoder::getNextToken()
+    {
+        Token::Token* token;
+
+        if (this->tokenStack->size() > 0) {
+            token = this->tokenStack->top();
+            this->tokenStack->pop();
+        } else {
+            token = this->stream->getNextToken();
+        }
+
+        return token;
     }
 }
