@@ -19,4 +19,20 @@ namespace YamlParser::Token {
     IOBuffer::IOReader* Token::getReader() {
         return this->reader;
     }
+
+    const char* tokenTypeName(Type type)
+    {
+        switch (type) {
+            case Type::Property:
+                return "property";
+            case Type::PlainValue:
+                return "plain.value";
+            case Type::Dash:
+                return "dash";
+            case Type::Pipe:
+                return "pipe";
+            case Type::Space:
+                return "space";
+        }
+    }
 }

@@ -13,6 +13,8 @@ namespace YamlParser::Token
         Pipe
     };
 
+    const char* tokenTypeName(Type);
+
     class Token {
     public:
         Token(int line, int column, IOBuffer::IOReader *reader);

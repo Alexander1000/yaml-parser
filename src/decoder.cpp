@@ -37,6 +37,7 @@ namespace YamlParser
                 element = new Element(ElementType::ObjectType, object);
                 break;
             default:
+                std::cout << "Unexpected token type: " << Token::tokenTypeName(token->getType()) << std::endl;
                 throw new UnexpectedTokenException;
         }
 
