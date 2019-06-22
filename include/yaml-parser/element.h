@@ -5,7 +5,8 @@ namespace YamlParser
 {
     enum ElementType {
         ObjectType,
-        PlainTextType
+        PlainTextType,
+        ListType
     };
 
     class Element

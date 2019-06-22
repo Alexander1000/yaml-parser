@@ -39,6 +39,7 @@ namespace YamlParser
         std::map<std::string, Element*>* object;
         char* plainValue;
         IOBuffer::IOMemoryBuffer* memoryBuffer;
+        std::list<Element*>* elementList;
 
         switch (token->getType()) {
             case Token::Type::Property:
@@ -62,6 +63,10 @@ namespace YamlParser
                 this->indent->push_back(memoryBuffer->length());
                 element = this->parse_element();
                 break;
+            case Token::Type::Dash:
+                elementList = this->parse_array();
+                element = new Element(ElementType::ListType, elementList);
+                break;
             default:
                 std::cout << "Unexpected token type: " << Token::tokenTypeName(token->getType()) << std::endl;
                 throw new UnexpectedTokenException;
@@ -83,6 +88,7 @@ namespace YamlParser
 
         PARSE_PAIR:
         if (token == NULL || token->getType() != Token::Type::Property) {
+            std::cout << "Unexpected token type: " << Token::tokenTypeName(token->getType()) << std::endl;
             throw new UnexpectedTokenException;
         }
 
@@ -111,6 +117,15 @@ namespace YamlParser
                     std::cout << "parent length: " << this->indent->back() << std::endl;
 
                     if (memoryBuffer->length() == this->indent->back()) {
+                        Token::Token* forwardToken = this->getNextToken();
+                        if (forwardToken->getType() == Token::Type::Dash) {
+                            this->tokenStack->push(forwardToken);
+                            this->tokenStack->push(token);
+                            break;
+                        }
+
+                        this->tokenStack->push(forwardToken);
+
                         token = this->getNextToken();
                         goto PARSE_PAIR;
                     }
@@ -126,6 +141,28 @@ namespace YamlParser
 
         this->indent->pop_back();
         return object;
+    }
+
+    std::list<Element*>* Decoder::parse_array()
+    {
+        std::list<Element*>* elementList = NULL;
+        elementList = new std::list<Element*>;
+        Token::Token* token = NULL;
+
+        PARSE_ELEMENT:
+        elementList->push_back(this->parse_element());
+
+        token = this->getNextToken();
+        if (token != NULL) {
+            if (token->getType() == Token::Type::Space) {
+                IOBuffer::IOMemoryBuffer* memoryBuffer = (IOBuffer::IOMemoryBuffer*) token->getReader();
+                if (memoryBuffer->length() == this->indent->back()) {
+                    goto PARSE_ELEMENT;
+                }
+            }
+        }
+
+        return elementList;
     }
 
     Token::Token* Decoder::getNextToken()
