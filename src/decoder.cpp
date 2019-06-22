@@ -109,6 +109,7 @@ namespace YamlParser
             }
         }
 
+        this->indent->pop_back();
         return object;
     }
 
