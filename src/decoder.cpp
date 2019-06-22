@@ -37,7 +37,7 @@ namespace YamlParser
         }
 
         char* propertyName = (char*) malloc(sizeof(char) * 1001);
-        memset(propertyName, 1001, sizeof(char));
+        memset(propertyName, 0, 1001 * sizeof(char));
         token->getReader()->read(propertyName, 1000);
 
         std::cout << "property.name: " << propertyName << std::endl;
