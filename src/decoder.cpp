@@ -1,6 +1,7 @@
 #include <iostream>
 #include <map>
 #include <string>
+#include <list>
 
 #include <yaml-parser/decoder.h>
 #include <yaml-parser/stream.h>
@@ -13,6 +14,7 @@ namespace YamlParser
     Decoder::Decoder(Stream* stream)
     {
         this->stream = stream;
+        this->indent->push_back(0);
     }
 
     Element* Decoder::parse()

@@ -2,6 +2,7 @@
 #define YAML_PARSER_DECODER_H
 
 #include <map>
+#include <list>
 
 #include <yaml-parser/stream.h>
 #include <yaml-parser/element.h>
@@ -15,6 +16,7 @@ namespace YamlParser
         Element* parse();
     private:
         Stream* stream;
+        std::list<int>* indent;
 
         Element* parse_element();
         std::map<std::string, Element*>* parse_object();
