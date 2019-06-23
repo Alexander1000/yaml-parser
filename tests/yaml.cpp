@@ -83,7 +83,23 @@ CppUnitTest::TestCase* testDecodeObject_YamlData_Positive()
     assertObjectPropertyValue(t, oUserData, "spaced value:with comma", "magic");
 
     assertObjectPropertyExist(t, oUserData, "nested");
-    assertObjectPropertyExist(t, oUserData, "holla");
+    YamlParser::Element* elUserDataNested = oUserData->at("nested");
+    assertElementType(t, elUserDataNested, YamlParser::ElementType::ObjectType);
+    YamlObject* oUserDataNested = (YamlObject*) elUserDataNested->getData();
+
+    assertObjectPropertyValue(t, oUserDataNested, "someObject", "some value");
+
+    assertObjectPropertyExist(t, oUserDataNested, "with eat nested");
+    YamlParser::Element* elUserDataNestedDouble = oUserDataNested->at("with eat nested");
+    assertElementType(t, elUserDataNestedDouble, YamlParser::ElementType::ObjectType);
+    YamlObject* oUserDataNestedDouble = (YamlObject*) elUserDataNestedDouble->getData();
+    assertObjectPropertyValue(t, oUserDataNestedDouble, "update", "1");
+    assertObjectPropertyValue(t, oUserDataNestedDouble, "test", "2");
+
+    assertObjectPropertyValue(t, oUserDataNested, "previous", "faaf");
+
+    assertObjectPropertyValue(t, oUserData, "holla", "test");
+
     assertObjectPropertyExist(t, oUserData, "it is array");
     assertObjectPropertyExist(t, oUserData, "someProperty");
     assertObjectPropertyExist(t, oUserData, "test");
