@@ -38,7 +38,7 @@ void assertObjectPropertyExist(CppUnitTest::TestCase* t, YamlObject* obj, const 
 
 CppUnitTest::TestCase* testDecodeObject_YamlData_Positive()
 {
-    CppUnitTest::TestCase* t = new CppUnitTest::TestCase("001-samle-data");
+    CppUnitTest::TestCase* t = new CppUnitTest::TestCase("001-sample-data");
     t->printTitle();
 
     IOBuffer::IOFileReader fileReader("../fixtures/001-sample-data.yaml");
@@ -51,6 +51,11 @@ CppUnitTest::TestCase* testDecodeObject_YamlData_Positive()
     YamlObject* rObj = (YamlObject*) rElement->getData();
 
     assertObjectPropertyExist(t, rObj, "simple");
+
+    YamlParser::Element* elRootSimple = rObj->at("simple");
+    assertElementType(t, elRootSimple, YamlParser::ElementType::PlainTextType);
+    CppUnitTest::assertEquals(t, (std::string*) elRootSimple->getData(), "alexander");
+
     assertObjectPropertyExist(t, rObj, "userData");
     assertObjectPropertyExist(t, rObj, "someTest");
 

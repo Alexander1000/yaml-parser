@@ -15,6 +15,7 @@ namespace YamlParser
     Decoder::Decoder(Stream* stream)
     {
         this->stream = stream;
+        this->indent = new std::list<int>;
         this->indent->push_back(0);
         this->tokenStack = new std::stack<Token::Token*>;
     }
@@ -40,6 +41,7 @@ namespace YamlParser
         char* plainValue;
         IOBuffer::IOMemoryBuffer* memoryBuffer;
         std::list<Element*>* elementList;
+        std::string* strValue = NULL;
 
         switch (token->getType()) {
             case Token::Type::Property:
@@ -54,7 +56,8 @@ namespace YamlParser
                 plainValue = (char*) malloc(1001 * sizeof(char));
                 memset(plainValue, 0, sizeof(char) * 1001);
                 token->getReader()->read(plainValue, 1000);
-                element = new Element(ElementType::PlainTextType, plainValue);
+                strValue = new std::string(plainValue);
+                element = new Element(ElementType::PlainTextType, strValue);
                 break;
             case Token::Type::Space:
                 std::cout << "Call Decoder::parse_element() [space]" << std::endl;
