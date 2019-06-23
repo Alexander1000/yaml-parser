@@ -57,6 +57,11 @@ CppUnitTest::TestCase* testDecodeObject_YamlData_Positive()
     CppUnitTest::assertEquals(t, (std::string*) elRootSimple->getData(), "alexander");
 
     assertObjectPropertyExist(t, rObj, "userData");
+
+    YamlParser::Element* elUserData = rObj->at("userData");
+    assertElementType(t, elUserData, YamlParser::ElementType::ObjectType);
+    YamlObject* oUserData = (YamlObject*) elUserData->getData();
+
     assertObjectPropertyExist(t, rObj, "someTest");
 
     t->finish();
