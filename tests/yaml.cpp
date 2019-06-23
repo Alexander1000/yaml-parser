@@ -36,6 +36,16 @@ void assertObjectPropertyExist(CppUnitTest::TestCase* t, YamlObject* obj, const 
     }
 }
 
+void assertObjectPropertyValue(CppUnitTest::TestCase* t, YamlObject* obj, const char* propertyName, const char* propertyValue)
+{
+    t->increment();
+    assertObjectPropertyExist(t, obj, propertyName);
+    YamlParser::Element* element = obj->at(propertyName);
+    assertElementType(t, element, YamlParser::ElementType::PlainTextType);
+    CppUnitTest::assertEquals(t, (std::string*) element->getData(), propertyValue);
+
+}
+
 CppUnitTest::TestCase* testDecodeObject_YamlData_Positive()
 {
     CppUnitTest::TestCase* t = new CppUnitTest::TestCase("001-sample-data");
@@ -64,9 +74,10 @@ CppUnitTest::TestCase* testDecodeObject_YamlData_Positive()
 
     // todo: assert each property
 
-    assertObjectPropertyExist(t, oUserData, "name");
-    assertObjectPropertyExist(t, oUserData, "birth.date");
-    assertObjectPropertyExist(t, oUserData, "some/info");
+    assertObjectPropertyValue(t, oUserData, "name", "Alexander");
+    assertObjectPropertyValue(t, oUserData, "birth.date", "28.08.1990");
+    assertObjectPropertyValue(t, oUserData, "some/info", "'Test Information'");
+
     assertObjectPropertyExist(t, oUserData, "key:value");
     assertObjectPropertyExist(t, oUserData, ":test");
     assertObjectPropertyExist(t, oUserData, "value with space");
