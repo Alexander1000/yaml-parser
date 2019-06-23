@@ -62,6 +62,20 @@ CppUnitTest::TestCase* testDecodeObject_YamlData_Positive()
     assertElementType(t, elUserData, YamlParser::ElementType::ObjectType);
     YamlObject* oUserData = (YamlObject*) elUserData->getData();
 
+    assertObjectPropertyExist(t, oUserData, "name");
+    assertObjectPropertyExist(t, oUserData, "birth.date");
+    assertObjectPropertyExist(t, oUserData, "some/info");
+    assertObjectPropertyExist(t, oUserData, "key:value");
+    assertObjectPropertyExist(t, oUserData, ":test");
+    assertObjectPropertyExist(t, oUserData, "value with space");
+    assertObjectPropertyExist(t, oUserData, "spaced value:with comma");
+    assertObjectPropertyExist(t, oUserData, "nested");
+    assertObjectPropertyExist(t, oUserData, "holla");
+    assertObjectPropertyExist(t, oUserData, "it is array");
+    assertObjectPropertyExist(t, oUserData, "someProperty");
+    assertObjectPropertyExist(t, oUserData, "test");
+    assertObjectPropertyExist(t, oUserData, "lklk");
+
     assertObjectPropertyExist(t, rObj, "someTest");
 
     t->finish();
