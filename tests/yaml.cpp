@@ -62,6 +62,8 @@ CppUnitTest::TestCase* testDecodeObject_YamlData_Positive()
     assertElementType(t, elUserData, YamlParser::ElementType::ObjectType);
     YamlObject* oUserData = (YamlObject*) elUserData->getData();
 
+    // todo: assert each property
+
     assertObjectPropertyExist(t, oUserData, "name");
     assertObjectPropertyExist(t, oUserData, "birth.date");
     assertObjectPropertyExist(t, oUserData, "some/info");
@@ -77,6 +79,8 @@ CppUnitTest::TestCase* testDecodeObject_YamlData_Positive()
     assertObjectPropertyExist(t, oUserData, "lklk");
 
     assertObjectPropertyExist(t, rObj, "someTest");
+
+    // todo: assert
 
     t->finish();
     return t;
