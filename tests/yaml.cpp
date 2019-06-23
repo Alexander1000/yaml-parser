@@ -1,5 +1,7 @@
 #include <iostream>
 #include <memory.h>
+#include <map>
+#include <list>
 
 #include <io-buffer.h>
 #include <yaml-parser.h>
@@ -8,6 +10,12 @@
 class AssertElementTypeException
 {};
 
+class AssertObjectPropertyExist
+{};
+
+typedef std::map<std::string, YamlParser::Element*> YamlObject;
+typedef std::list<YamlParser::Element*> YamlArray;
+
 void assertElementType(CppUnitTest::TestCase* t, YamlParser::Element* element, YamlParser::ElementType type)
 {
     t->increment();
@@ -15,6 +23,16 @@ void assertElementType(CppUnitTest::TestCase* t, YamlParser::Element* element, Y
     if (element->getType() != type) {
         std::cout << "Expected element" << YamlParser::getElementTypeName(type) << ", but: " << YamlParser::getElementTypeName(element->getType()) << std::endl;
         throw new AssertElementTypeException;
+    }
+}
+
+void assertObjectPropertyExist(CppUnitTest::TestCase* t, YamlObject* obj, const char* propertyName)
+{
+    t->increment();
+
+    if (obj->find(propertyName) == obj->end()) {
+        std::cout << "Expected property \"" << propertyName << "\" must be exist" << std::endl;
+        throw new AssertObjectPropertyExist;
     }
 }
 
@@ -30,8 +48,11 @@ CppUnitTest::TestCase* testDecodeObject_YamlData_Positive()
 
     YamlParser::Element* rElement = decoder.parse();
     assertElementType(t, rElement, YamlParser::ElementType::ObjectType);
+    YamlObject* rObj = (YamlObject*) rElement->getData();
 
-    // todo: make tests
+    assertObjectPropertyExist(t, rObj, "simple");
+    assertObjectPropertyExist(t, rObj, "userData");
+    assertObjectPropertyExist(t, rObj, "someTest");
 
     t->finish();
     return t;
