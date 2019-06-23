@@ -77,11 +77,11 @@ CppUnitTest::TestCase* testDecodeObject_YamlData_Positive()
     assertObjectPropertyValue(t, oUserData, "name", "Alexander");
     assertObjectPropertyValue(t, oUserData, "birth.date", "28.08.1990");
     assertObjectPropertyValue(t, oUserData, "some/info", "'Test Information'");
+    assertObjectPropertyValue(t, oUserData, "key:value", "value2");
+    assertObjectPropertyValue(t, oUserData, ":test", "test");
+    assertObjectPropertyValue(t, oUserData, "value with space", "some test");
+    assertObjectPropertyValue(t, oUserData, "spaced value:with comma", "magic");
 
-    assertObjectPropertyExist(t, oUserData, "key:value");
-    assertObjectPropertyExist(t, oUserData, ":test");
-    assertObjectPropertyExist(t, oUserData, "value with space");
-    assertObjectPropertyExist(t, oUserData, "spaced value:with comma");
     assertObjectPropertyExist(t, oUserData, "nested");
     assertObjectPropertyExist(t, oUserData, "holla");
     assertObjectPropertyExist(t, oUserData, "it is array");
