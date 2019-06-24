@@ -21,7 +21,7 @@ rm -f CMakeCache.txt
 rm -f Makefile
 rm -f yaml-parser-tests
 
-cmake .
+cmake -DCMAKE_BUILD_TYPE=Debug .
 make
 
 echo
