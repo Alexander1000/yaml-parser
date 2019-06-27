@@ -124,7 +124,7 @@ namespace YamlParser
                         if (forwardToken->getType() == Token::Type::Dash) {
                             this->tokenStack->push(forwardToken);
                             this->tokenStack->push(token);
-                            return object;
+                            break;
                         }
 
                         this->tokenStack->push(forwardToken);
@@ -153,6 +153,12 @@ namespace YamlParser
         Token::Token* token = NULL;
 
         PARSE_ELEMENT:
+        // hack for nested objects with custom indent
+        token = this->getNextToken();
+        if (token->getType() == Token::Type::Property) {
+            this->indent->push_back(token->getColumn());
+        }
+        this->tokenStack->push(token);
         elementList->push_back(this->parse_element());
 
         token = this->getNextToken();
