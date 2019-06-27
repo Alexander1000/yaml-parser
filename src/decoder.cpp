@@ -156,6 +156,7 @@ namespace YamlParser
         // hack for nested objects with custom indent
         token = this->getNextToken();
         if (token->getType() == Token::Type::Property) {
+            std::cout << "Hack shift indent: " << token->getColumn() << std::endl;
             this->indent->push_back(token->getColumn());
         }
         this->tokenStack->push(token);

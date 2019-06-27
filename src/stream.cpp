@@ -135,11 +135,12 @@ namespace YamlParser
         std::cout << "Spaces: ";
 
         while (isIndent(*this->curSymbol)) {
+            std::cout << (int) *this->curSymbol << " ";
             ioWriter->write(this->curSymbol, 1);
             this->curSymbol = this->getNextChar();
-            std::cout << (int) *this->curSymbol << " ";
         }
 
+        std::cout << (int) *this->curSymbol << " ";
         std::cout << " [ " << this->curSymbol[0] << " ]";
 
         std::cout << std::endl;
@@ -153,7 +154,7 @@ namespace YamlParser
         std::cout << "Call Stream::parsePropertyToken()" << std::endl; // todo: remove after debug
 
         int tokenLine = this->currentLine;
-        int tokenColumn = this->currentColumn;
+        int tokenColumn = this->currentColumn - 1;
 
         this->lastIndent = this->currentColumn;
 
@@ -231,7 +232,7 @@ namespace YamlParser
         std::cout << "Call Stream::parseArrayElementToken()" << std::endl; // todo: remove after debug
 
         int tokenLine = this->currentLine;
-        int tokenColumn = this->currentColumn;
+        int tokenColumn = this->currentColumn - 1;
 
         Token::Token* token = NULL;
 
