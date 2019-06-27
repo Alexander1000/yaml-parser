@@ -134,6 +134,15 @@ CppUnitTest::TestCase* testDecodeObject_YamlData_Positive()
 
     // todo: assert: someValue nested
 
+    assertObjectPropertyExist(t, oUserDataObject04, "someValue");
+    YamlParser::Element* elUserDataSomeValue = oUserDataObject04->at("someValue");
+    assertElementType(t, elUserDataSomeValue, YamlParser::ElementType::ObjectType);
+    YamlObject* oUserDataSomeValue = (YamlObject*) elUserDataSomeValue->getData();
+
+    assertObjectPropertyValue(t, oUserDataSomeValue, "hopp", "chik");
+
+    // todo: assert oUserDataSomeValue : nested + eat arr
+
     assertObjectPropertyValue(t, oUserDataObject04, "someVar", "242f");
 
     assertObjectPropertyExist(t, oUserData, "someProperty");
