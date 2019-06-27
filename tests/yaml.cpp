@@ -118,6 +118,12 @@ CppUnitTest::TestCase* testDecodeObject_YamlData_Positive()
     YamlObject* oUserDataArray02 = (YamlObject*) elUserDataArray02->getData();
     assertObjectPropertyValue(t, oUserDataArray02, "test 2", "999");
 
+    itUserDataArray++;
+
+    YamlParser::Element* elUserDataArray03 = *itUserDataArray;
+    assertElementType(t, elUserDataArray03, YamlParser::ElementType::PlainTextType);
+    CppUnitTest::assertEquals(t, (std::string*) elUserDataArray03->getData(), "test 3");
+
     assertObjectPropertyExist(t, oUserData, "someProperty");
     assertObjectPropertyExist(t, oUserData, "test");
     assertObjectPropertyExist(t, oUserData, "lklk");

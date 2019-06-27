@@ -160,7 +160,12 @@ namespace YamlParser
             if (token->getType() == Token::Type::Space) {
                 IOBuffer::IOMemoryBuffer* memoryBuffer = (IOBuffer::IOMemoryBuffer*) token->getReader();
                 if (memoryBuffer->length() == this->indent->back()) {
-                    goto PARSE_ELEMENT;
+                    Token::Token* dashToken = this->getNextToken();
+                    if (dashToken->getType() == Token::Type::Dash) {
+                        goto PARSE_ELEMENT;
+                    } else {
+                        this->tokenStack->push(token);
+                    }
                 }
             }
         }
