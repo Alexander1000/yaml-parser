@@ -124,7 +124,7 @@ namespace YamlParser
                         if (forwardToken->getType() == Token::Type::Dash) {
                             this->tokenStack->push(forwardToken);
                             this->tokenStack->push(token);
-                            break;
+                            return object;
                         }
 
                         this->tokenStack->push(forwardToken);
