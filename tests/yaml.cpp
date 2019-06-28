@@ -140,6 +140,23 @@ CppUnitTest::TestCase* testDecodeObject_YamlData_Positive()
     YamlObject* oUserDataSomeValue = (YamlObject*) elUserDataSomeValue->getData();
 
     assertObjectPropertyValue(t, oUserDataSomeValue, "hopp", "chik");
+    assertObjectPropertyExist(t, oUserDataSomeValue, "nested");
+    YamlParser::Element* elUserDataSomeValueNested = oUserDataSomeValue->at("nested");
+    assertElementType(t, elUserDataSomeValueNested, YamlParser::ElementType::ListType);
+
+    YamlArray* aUserDataSomeValueNested = (YamlArray*) elUserDataSomeValueNested->getData();
+
+    YamlArray::iterator itUserDataSomeValueNested = aUserDataSomeValueNested->begin();
+
+    YamlParser::Element* elUserDataSomeValueNested01 = *itUserDataSomeValueNested;
+    assertElementType(t, elUserDataSomeValueNested01, YamlParser::ElementType::PlainTextType);
+    CppUnitTest::assertEquals(t, (std::string*) elUserDataSomeValueNested01->getData(), "arr");
+
+    itUserDataSomeValueNested++;
+
+    YamlParser::Element* elUserDataSomeValueNested02 = *itUserDataSomeValueNested;
+    assertElementType(t, elUserDataSomeValueNested02, YamlParser::ElementType::PlainTextType);
+    CppUnitTest::assertEquals(t, (std::string*) elUserDataSomeValueNested02->getData(), "342");
 
     // todo: assert oUserDataSomeValue : nested + eat arr
 
