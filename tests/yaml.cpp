@@ -145,6 +145,7 @@ CppUnitTest::TestCase* testDecodeObject_YamlData_Positive()
     assertElementType(t, elUserDataSomeValueNested, YamlParser::ElementType::ListType);
 
     YamlArray* aUserDataSomeValueNested = (YamlArray*) elUserDataSomeValueNested->getData();
+    CppUnitTest::assertEquals(t, aUserDataSomeValueNested->size(), 2);
 
     YamlArray::iterator itUserDataSomeValueNested = aUserDataSomeValueNested->begin();
 
@@ -158,7 +159,33 @@ CppUnitTest::TestCase* testDecodeObject_YamlData_Positive()
     assertElementType(t, elUserDataSomeValueNested02, YamlParser::ElementType::PlainTextType);
     CppUnitTest::assertEquals(t, (std::string*) elUserDataSomeValueNested02->getData(), "342");
 
-    // todo: assert oUserDataSomeValue : nested + eat arr
+    assertObjectPropertyExist(t, oUserDataSomeValue, "eat arr");
+    YamlParser::Element* elUserDataSomeValueEatArr = oUserDataSomeValue->at("eat arr");
+    assertElementType(t, elUserDataSomeValueEatArr, YamlParser::ElementType::ListType);
+
+    YamlArray* aUserDataSomeValueEatArr = (YamlArray*) elUserDataSomeValueEatArr->getData();
+    CppUnitTest::assertEquals(t, aUserDataSomeValueEatArr->size(), 2);
+
+    YamlArray::iterator itUserDataSomeValueEatArr = aUserDataSomeValueEatArr->begin();
+
+    YamlParser::Element* elUserDataSomeValueEatArr01 = *itUserDataSomeValueEatArr;
+    assertElementType(t, elUserDataSomeValueEatArr01, YamlParser::ElementType::PlainTextType);
+    CppUnitTest::assertEquals(t, (std::string*) elUserDataSomeValueEatArr01->getData(), "property");
+
+    itUserDataSomeValueEatArr++;
+
+    YamlParser::Element* elUserDataSomeValueEatArr02 = *itUserDataSomeValueEatArr;
+    assertElementType(t, elUserDataSomeValueEatArr02, YamlParser::ElementType::ObjectType);
+    YamlObject* oUserDataSomeValueEatArr02 = (YamlObject*) elUserDataSomeValueEatArr02->getData();
+
+    assertObjectPropertyExist(t, oUserDataSomeValueEatArr02, "prop");
+    YamlParser::Element* elUserDataSomeValueEatArr02Prop = oUserDataSomeValueEatArr02->at("prop");
+    assertElementType(t, elUserDataSomeValueEatArr02Prop, YamlParser::ElementType::ObjectType);
+    YamlObject* oUserDataSomeValueEatArr02Prop = (YamlObject*) elUserDataSomeValueEatArr02Prop->getData();
+    assertObjectPropertyExist(t, oUserDataSomeValueEatArr02Prop, "test");
+    YamlParser::Element* elUserDataSomeValueEatArr02PropTest = oUserDataSomeValueEatArr02Prop->at("test");
+    assertElementType(t, elUserDataSomeValueEatArr02PropTest, YamlParser::ElementType::PlainTextType);
+    CppUnitTest::assertEquals(t, (std::string*) elUserDataSomeValueEatArr02PropTest->getData(), "324");
 
     assertObjectPropertyValue(t, oUserDataObject04, "someVar", "242f");
 
