@@ -30,6 +30,7 @@ namespace YamlParser
         std::cout << "Call Decoder::parse_element()" << std::endl;
 
         Token::Token* token = NULL;
+        Token::Token* forwardToken = NULL;
         token = this->getNextToken();
 
         if (token == NULL) {
@@ -61,10 +62,16 @@ namespace YamlParser
                 break;
             case Token::Type::Space:
                 std::cout << "Call Decoder::parse_element() [space]" << std::endl;
-
                 memoryBuffer = (IOBuffer::IOMemoryBuffer*) token->getReader();
-                this->indent->push_back(memoryBuffer->length());
-                element = this->parse_element();
+
+                if (this->indent->back() == memoryBuffer->length()) {
+                    element = this->parse_element();
+                } else {
+                    this->indent->push_back(memoryBuffer->length());
+                    element = this->parse_element();
+                    // this->indent->pop_back();
+                }
+
                 break;
             case Token::Type::Dash:
                 elementList = this->parse_array();
@@ -114,22 +121,20 @@ namespace YamlParser
                     // parse next key-value pair
                     goto PARSE_PAIR;
                 case Token::Type::Space:
-                    std::cout << "indent in property" << std::endl;
+                    // std::cout << "indent in property" << std::endl;
                     memoryBuffer = (IOBuffer::IOMemoryBuffer*) token->getReader();
-                    std::cout << "length indent: " << memoryBuffer->length() << std::endl;
-                    std::cout << "parent length: " << this->indent->back() << std::endl;
+                    // std::cout << "length indent: " << memoryBuffer->length() << std::endl;
+                    // std::cout << "parent length: " << this->indent->back() << std::endl;
 
                     if (memoryBuffer->length() == this->indent->back()) {
                         Token::Token* forwardToken = this->getNextToken();
-                        if (forwardToken->getType() == Token::Type::Dash) {
+                        if (forwardToken->getType() != Token::Type::Property) {
                             this->tokenStack->push(forwardToken);
                             this->tokenStack->push(token);
                             break;
                         }
 
-                        this->tokenStack->push(forwardToken);
-
-                        token = this->getNextToken();
+                        token = forwardToken;
                         goto PARSE_PAIR;
                     }
 
@@ -171,11 +176,18 @@ namespace YamlParser
                     if (dashToken->getType() == Token::Type::Dash) {
                         goto PARSE_ELEMENT;
                     } else {
+                        this->tokenStack->push(dashToken);
                         this->tokenStack->push(token);
                     }
+                } else {
+                    this->tokenStack->push(token);
                 }
+            } else {
+                this->tokenStack->push(token);
             }
         }
+
+        std::cout << "Size list: " << elementList->size() << std::endl;
 
         return elementList;
     }
