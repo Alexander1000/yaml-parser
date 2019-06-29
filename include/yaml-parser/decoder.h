@@ -20,6 +20,7 @@ namespace YamlParser
         std::list<int>* indent;
         std::stack<Token::Token*>* tokenStack;
         std::list<char*>* objectName;
+        std::stack<int>* indentArray;
 
         void pushToken(Token::Token*);
         Token::Token* getNextToken();

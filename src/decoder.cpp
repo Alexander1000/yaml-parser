@@ -19,6 +19,7 @@ namespace YamlParser
         this->indent->push_back(0);
         this->tokenStack = new std::stack<Token::Token*>;
         this->objectName = new std::list<char*>;
+        this->indentArray = new std::stack<int>;
     }
 
     Element* Decoder::parse()
@@ -75,8 +76,13 @@ namespace YamlParser
 
                 break;
             case Token::Type::Dash:
+                this->indentArray->push(token->getColumn() - 1);
                 elementList = this->parse_array();
                 element = new Element(ElementType::ListType, elementList);
+                if (this->indentArray->top() != this->indent->back()) {
+                    this->indent->pop_back();
+                }
+                this->indentArray->pop();
                 break;
             default:
                 std::cout << "Unexpected token type: " << Token::tokenTypeName(token->getType()) << std::endl;
@@ -95,6 +101,7 @@ namespace YamlParser
     std::map<std::string, Element*>* Decoder::parse_object(Token::Token* token)
     {
         std::cout << "Decoder::parse_object()" << std::endl;
+        std::cout << "Current Indent: " << this->indent->back() << std::endl;
 
         std::map<std::string, Element*>* object;
         object = new std::map<std::string, Element*>;
@@ -158,6 +165,7 @@ namespace YamlParser
     std::list<Element*>* Decoder::parse_array()
     {
         std::cout << "Decoder::parse_array()" << std::endl;
+        std::cout << "Current Indent: " << this->indent->back() << std::endl;
 
         std::list<Element*>* elementList = NULL;
         elementList = new std::list<Element*>;
