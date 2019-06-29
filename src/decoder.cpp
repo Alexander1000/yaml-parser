@@ -18,6 +18,7 @@ namespace YamlParser
         this->indent = new std::list<int>;
         this->indent->push_back(0);
         this->tokenStack = new std::stack<Token::Token*>;
+        this->objectName = new std::list<char*>;
     }
 
     Element* Decoder::parse()
@@ -82,6 +83,7 @@ namespace YamlParser
                 throw new UnexpectedTokenException;
         }
 
+        std::cout << "Return Decoder::parse_element() [" << Token::tokenTypeName(token->getType()) << "]" << std::endl;
         return element;
     }
 
@@ -92,6 +94,8 @@ namespace YamlParser
 
     std::map<std::string, Element*>* Decoder::parse_object(Token::Token* token)
     {
+        std::cout << "Decoder::parse_object()" << std::endl;
+
         std::map<std::string, Element*>* object;
         object = new std::map<std::string, Element*>;
         char* propertyName;
@@ -153,6 +157,8 @@ namespace YamlParser
 
     std::list<Element*>* Decoder::parse_array()
     {
+        std::cout << "Decoder::parse_array()" << std::endl;
+
         std::list<Element*>* elementList = NULL;
         elementList = new std::list<Element*>;
         Token::Token* token = NULL;
@@ -175,16 +181,12 @@ namespace YamlParser
                     Token::Token* dashToken = this->getNextToken();
                     if (dashToken->getType() == Token::Type::Dash) {
                         goto PARSE_ELEMENT;
-                    } else {
-                        this->tokenStack->push(dashToken);
-                        this->tokenStack->push(token);
                     }
-                } else {
-                    this->tokenStack->push(token);
+                    this->tokenStack->push(dashToken);
                 }
-            } else {
-                this->tokenStack->push(token);
             }
+
+            this->tokenStack->push(token);
         }
 
         std::cout << "Size list: " << elementList->size() << std::endl;
