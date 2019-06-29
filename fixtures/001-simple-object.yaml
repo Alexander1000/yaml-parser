@@ -1,0 +1,14 @@
+
+simple: alexander
+
+userData:
+  name: Alexander
+  birth.date: 28.08.1990
+  some/info: 'Test Information'
+  key:value: value2
+  :test: test
+  value with space: some test
+  spaced value:with comma: magic
+
+someTest:
+  val: key

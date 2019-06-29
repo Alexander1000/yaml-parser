@@ -46,9 +46,50 @@ void assertObjectPropertyValue(CppUnitTest::TestCase* t, YamlObject* obj, const 
 
 }
 
+CppUnitTest::TestCase* testDecodeObject_SimpleYamlData_Positive()
+{
+    CppUnitTest::TestCase* t = new CppUnitTest::TestCase("001-simple-object");
+    t->printTitle();
+
+    IOBuffer::IOFileReader fileReader("../fixtures/001-simple-object.yaml");
+    IOBuffer::CharStream charStream(&fileReader);
+    YamlParser::Stream yamlStream(&charStream);
+    YamlParser::Decoder decoder(&yamlStream);
+
+    YamlParser::Element* rElement = decoder.parse();
+    assertElementType(t, rElement, YamlParser::ElementType::ObjectType);
+    YamlObject* rObj = (YamlObject*) rElement->getData();
+
+    assertObjectPropertyValue(t, rObj, "simple", "alexander");
+
+    assertObjectPropertyExist(t, rObj, "userData");
+
+    YamlParser::Element* elUserData = rObj->at("userData");
+    assertElementType(t, elUserData, YamlParser::ElementType::ObjectType);
+    YamlObject* oUserData = (YamlObject*) elUserData->getData();
+
+    assertObjectPropertyValue(t, oUserData, "name", "Alexander");
+    assertObjectPropertyValue(t, oUserData, "birth.date", "28.08.1990");
+    assertObjectPropertyValue(t, oUserData, "some/info", "'Test Information'");
+    assertObjectPropertyValue(t, oUserData, "key:value", "value2");
+    assertObjectPropertyValue(t, oUserData, ":test", "test");
+    assertObjectPropertyValue(t, oUserData, "value with space", "some test");
+    assertObjectPropertyValue(t, oUserData, "spaced value:with comma", "magic");
+
+    assertObjectPropertyExist(t, rObj, "someTest");
+    YamlParser::Element* elSomeTest = rObj->at("someTest");
+    assertElementType(t, elSomeTest, YamlParser::ElementType::ObjectType);
+    YamlObject* oSomeTest = (YamlObject*) elSomeTest->getData();
+
+    assertObjectPropertyValue(t, oSomeTest, "val", "key");
+
+    t->finish();
+    return t;
+}
+
 CppUnitTest::TestCase* testDecodeObject_YamlData_Positive()
 {
-    CppUnitTest::TestCase* t = new CppUnitTest::TestCase("001-sample-data");
+    CppUnitTest::TestCase* t = new CppUnitTest::TestCase("002-sample-data");
     t->printTitle();
 
     IOBuffer::IOFileReader fileReader("../fixtures/001-sample-data.yaml");
@@ -204,6 +245,8 @@ CppUnitTest::TestCase* testDecodeObject_YamlData_Positive()
 int main(int argc, char** argv)
 {
     CppUnitTest::TestSuite testSuite;
+
+    testSuite.addTestCase(testDecodeObject_SimpleYamlData_Positive());
 
     testSuite.addTestCase(testDecodeObject_YamlData_Positive());
 
