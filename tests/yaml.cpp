@@ -87,6 +87,60 @@ CppUnitTest::TestCase* testDecodeObject_SimpleYamlData_Positive()
     return t;
 }
 
+CppUnitTest::TestCase* testDecodeObject_YamlNestedObjects_Positive()
+{
+    CppUnitTest::TestCase* t = new CppUnitTest::TestCase("002-nested-objects");
+    t->printTitle();
+
+    IOBuffer::IOFileReader fileReader("../fixtures/002-nested-objects.yaml");
+    IOBuffer::CharStream charStream(&fileReader);
+    YamlParser::Stream yamlStream(&charStream);
+    YamlParser::Decoder decoder(&yamlStream);
+
+    YamlParser::Element* rElement = decoder.parse();
+    assertElementType(t, rElement, YamlParser::ElementType::ObjectType);
+    YamlObject* rObj = (YamlObject*) rElement->getData();
+
+    assertObjectPropertyExist(t, rObj, "reporting");
+    YamlParser::Element* elReporting = rObj->at("reporting");
+    assertElementType(t, elReporting, YamlParser::ElementType::ObjectType);
+
+    YamlObject* oReporting = (YamlObject*) elReporting->getData();
+    assertObjectPropertyExist(t, oReporting, "stored_procs");
+
+    YamlParser::Element* elStoredProcs = oReporting->at("stored_procs");
+    assertElementType(t, elStoredProcs, YamlParser::ElementType::ObjectType);
+
+    YamlObject* oStoredProcs = (YamlObject*) elStoredProcs->getData();
+    assertObjectPropertyExist(t, oStoredProcs, "reportingsp");
+
+    YamlParser::Element* elReportingSp = oStoredProcs->at("reportingsp");
+    assertElementType(t, elReportingSp, YamlParser::ElementType::ObjectType);
+    YamlObject* oReportingSp = (YamlObject*) elReportingSp->getData();
+    assertObjectPropertyExist(t, oReportingSp, "uses");
+    YamlParser::Element* elUses01 = oReportingSp->at("uses");
+    assertElementType(t, elUses01, YamlParser::ElementType::ObjectType);
+    YamlObject* oUses01 = (YamlObject*) elUses01->getData();
+    assertObjectPropertyValue(t, oUses01, "usedin", "breadcrumb");
+
+    assertObjectPropertyExist(t, oStoredProcs, "secondProc");
+    YamlParser::Element* elSecondProc = oStoredProcs->at("secondProc");
+    assertElementType(t, elSecondProc, YamlParser::ElementType::ObjectType);
+    YamlObject* oSecondProc = (YamlObject*) elSecondProc->getData();
+    assertObjectPropertyExist(t, oSecondProc, "uses");
+    YamlParser::Element* elUses02 = oSecondProc->at("uses");
+    assertElementType(t, elUses02, YamlParser::ElementType::ObjectType);
+    YamlObject* oUses02 = (YamlObject*) elUses02->getData();
+    assertObjectPropertyValue(t, oUses02, "usedin", "something_else");
+
+    assertObjectPropertyValue(t, oReporting, "subField", "883");
+
+    assertObjectPropertyValue(t, rObj, "rootElement", "'Puerto Rico'");
+
+    t->finish();
+    return t;
+}
+
 CppUnitTest::TestCase* testDecodeObject_YamlData_Positive()
 {
     CppUnitTest::TestCase* t = new CppUnitTest::TestCase("002-sample-data");
@@ -247,6 +301,8 @@ int main(int argc, char** argv)
     CppUnitTest::TestSuite testSuite;
 
     testSuite.addTestCase(testDecodeObject_SimpleYamlData_Positive());
+
+    testSuite.addTestCase(testDecodeObject_YamlNestedObjects_Positive());
 
     testSuite.addTestCase(testDecodeObject_YamlData_Positive());
 
