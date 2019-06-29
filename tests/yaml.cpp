@@ -92,7 +92,7 @@ CppUnitTest::TestCase* testDecodeObject_YamlData_Positive()
     CppUnitTest::TestCase* t = new CppUnitTest::TestCase("002-sample-data");
     t->printTitle();
 
-    IOBuffer::IOFileReader fileReader("../fixtures/001-sample-data.yaml");
+    IOBuffer::IOFileReader fileReader("../fixtures/002-sample-data.yaml");
     IOBuffer::CharStream charStream(&fileReader);
     YamlParser::Stream yamlStream(&charStream);
     YamlParser::Decoder decoder(&yamlStream);

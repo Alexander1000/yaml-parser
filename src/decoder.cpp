@@ -130,7 +130,11 @@ namespace YamlParser
             switch (token->getType()) {
                 case Token::Type::Property:
                     // parse next key-value pair
-                    goto PARSE_PAIR;
+                    if (this->indent->back() == 0) {
+                        goto PARSE_PAIR;
+                    }
+                    this->tokenStack->push(token);
+                    break;
                 case Token::Type::Space:
                     // std::cout << "indent in property" << std::endl;
                     memoryBuffer = (IOBuffer::IOMemoryBuffer*) token->getReader();
