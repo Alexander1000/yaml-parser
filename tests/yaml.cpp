@@ -155,6 +155,8 @@ CppUnitTest::TestCase* testDecodeArray_YamlDataWithArray_Positive()
     assertElementType(t, rElement, YamlParser::ElementType::ListType);
     YamlArray* aEmployee = (YamlArray*) rElement->getData();
 
+    CppUnitTest::assertEquals(t, aEmployee->size(), 2);
+
     YamlArray::iterator itArray = aEmployee->begin();
 
     YamlParser::Element* elEmployee01 = *itArray;
