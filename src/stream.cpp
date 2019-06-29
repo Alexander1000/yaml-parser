@@ -46,6 +46,19 @@ namespace YamlParser
                     return NULL;
                 }
 
+                if (*this->curSymbol == '#') {
+                    do {
+                        this->curSymbol = this->getNextChar();
+                    } while (this->curSymbol != NULL && (!(*this->curSymbol == 0x0A || *this->curSymbol == 0x0D)));
+                    while (this->curSymbol != NULL && (*this->curSymbol == 0x0A || *this->curSymbol == 0x0D)) {
+                        // skip empty strings
+                        this->curSymbol = this->getNextChar();
+                    }
+                    if (this->curSymbol == NULL) {
+                        return NULL;
+                    }
+                }
+
                 if (isIndent(*this->curSymbol)) {
                     std::cout << "Mode: plain" << std::endl;
                     return this->parseIndentToken();

@@ -141,6 +141,38 @@ CppUnitTest::TestCase* testDecodeObject_YamlNestedObjects_Positive()
     return t;
 }
 
+CppUnitTest::TestCase* testDecodeArray_YamlDataWithArray_Positive()
+{
+    CppUnitTest::TestCase* t = new CppUnitTest::TestCase("003-employee");
+    t->printTitle();
+
+    IOBuffer::IOFileReader fileReader("../fixtures/003-employee.yaml");
+    IOBuffer::CharStream charStream(&fileReader);
+    YamlParser::Stream yamlStream(&charStream);
+    YamlParser::Decoder decoder(&yamlStream);
+
+    YamlParser::Element* rElement = decoder.parse();
+    assertElementType(t, rElement, YamlParser::ElementType::ListType);
+    YamlArray* aEmployee = (YamlArray*) rElement->getData();
+
+    YamlArray::iterator itArray = aEmployee->begin();
+
+    YamlParser::Element* elEmployee01 = *itArray;
+    assertElementType(t, elEmployee01, YamlParser::ElementType::ObjectType);
+    YamlObject* oEmployee01 = (YamlObject*) elEmployee01->getData();
+    assertObjectPropertyExist(t, oEmployee01, "martin");
+
+    itArray++;
+
+    YamlParser::Element* elEmployee02 = *itArray;
+    assertElementType(t, elEmployee02, YamlParser::ElementType::ObjectType);
+    YamlObject* oEmployee02 = (YamlObject*) elEmployee02->getData();
+    assertObjectPropertyExist(t, oEmployee02, "tabitha");
+
+    t->finish();
+    return t;
+}
+
 CppUnitTest::TestCase* testDecodeObject_YamlData_Positive()
 {
     CppUnitTest::TestCase* t = new CppUnitTest::TestCase("002-sample-data");
@@ -303,6 +335,8 @@ int main(int argc, char** argv)
     testSuite.addTestCase(testDecodeObject_SimpleYamlData_Positive());
 
     testSuite.addTestCase(testDecodeObject_YamlNestedObjects_Positive());
+
+    testSuite.addTestCase(testDecodeArray_YamlDataWithArray_Positive());
 
     testSuite.addTestCase(testDecodeObject_YamlData_Positive());
 
