@@ -71,7 +71,7 @@ namespace YamlParser
                 } else {
                     this->indent->push_back(memoryBuffer->length());
                     element = this->parse_element();
-                    // this->indent->pop_back();
+                    this->indent->pop_back();
                 }
 
                 break;
@@ -162,7 +162,7 @@ namespace YamlParser
             }
         }
 
-        this->indent->pop_back();
+        // this->indent->pop_back();
         return object;
     }
 
@@ -176,14 +176,20 @@ namespace YamlParser
         Token::Token* token = NULL;
 
         PARSE_ELEMENT:
+        bool isNested = false;
         // hack for nested objects with custom indent
         token = this->getNextToken();
         if (token->getType() == Token::Type::Property) {
             // std::cout << "Hack shift indent: " << token->getColumn() << std::endl;
             this->indent->push_back(token->getColumn());
+            isNested = true;
         }
         this->tokenStack->push(token);
         elementList->push_back(this->parse_element());
+
+        if (isNested) {
+            this->indent->pop_back();
+        }
 
         token = this->getNextToken();
         if (token != NULL) {

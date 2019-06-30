@@ -190,6 +190,13 @@ CppUnitTest::TestCase* testDecodeArray_YamlDataWithArray_Positive()
     YamlObject* oEmployee01 = (YamlObject*) elEmployee01->getData();
     assertObjectPropertyExist(t, oEmployee01, "martin");
 
+    YamlParser::Element* elMartin = oEmployee01->at("martin");
+    assertElementType(t, elMartin, YamlParser::ElementType::ObjectType);
+    YamlObject* oMartin = (YamlObject*) elMartin->getData();
+    assertObjectPropertyValue(t, oMartin, "name", "Martin D'vloper");
+    assertObjectPropertyValue(t, oMartin, "job", "Developer");
+    assertObjectPropertyExist(t, oMartin, "skills");
+
     itArray++;
 
     YamlParser::Element* elEmployee02 = *itArray;
