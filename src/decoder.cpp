@@ -32,7 +32,7 @@ namespace YamlParser
         // std::cout << "Call Decoder::parse_element()" << std::endl;
 
         Token::Token* token = NULL;
-        Token::Token* forwardToken = NULL;
+        // Token::Token* forwardToken = NULL;
         token = this->getNextToken();
 
         if (token == NULL) {
