@@ -43,7 +43,31 @@ void assertObjectPropertyValue(CppUnitTest::TestCase* t, YamlObject* obj, const 
     YamlParser::Element* element = obj->at(propertyName);
     assertElementType(t, element, YamlParser::ElementType::PlainTextType);
     CppUnitTest::assertEquals(t, (std::string*) element->getData(), propertyValue);
+}
 
+void print_tokens(YamlParser::Stream* stream) {
+    YamlParser::Token::Token* token = NULL;
+
+    char* buffer = (char*) malloc(sizeof(char) * 1001);
+
+    do {
+        token = stream->getNextToken();
+        if (token != NULL) {
+            std::cout << "-----<Token>------" << std::endl;
+            std::cout << "Type: " << YamlParser::Token::tokenTypeName(token->getType()) << std::endl;
+            std::cout << "Coords: (" << token->getLine() << "; " << token->getColumn() << ")" << std::endl;
+
+            IOBuffer::IOReader* reader = token->getReader();
+
+            if (reader != NULL) {
+                memset(buffer, 1001, sizeof(char));
+                reader->read(buffer, 1000);
+                std::cout << "Token: " << buffer << std::endl;
+            }
+
+            std::cout << std::endl << std::endl;
+        }
+    } while(token != NULL);
 }
 
 CppUnitTest::TestCase* testDecodeObject_SimpleYamlData_Positive()
@@ -150,6 +174,8 @@ CppUnitTest::TestCase* testDecodeArray_YamlDataWithArray_Positive()
     IOBuffer::CharStream charStream(&fileReader);
     YamlParser::Stream yamlStream(&charStream);
     YamlParser::Decoder decoder(&yamlStream);
+
+    // print_tokens(&yamlStream);
 
     YamlParser::Element* rElement = decoder.parse();
     assertElementType(t, rElement, YamlParser::ElementType::ListType);

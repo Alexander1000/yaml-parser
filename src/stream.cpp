@@ -23,7 +23,7 @@ namespace YamlParser
 
     Token::Token* Stream::getNextToken()
     {
-        std::cout << "Call Stream::getNextToken()" << std::endl;
+        // std::cout << "Call Stream::getNextToken()" << std::endl;
 
         if (this->curSymbol == NULL) {
             this->curSymbol = this->getNextChar();
@@ -60,7 +60,7 @@ namespace YamlParser
                 }
 
                 if (isIndent(*this->curSymbol)) {
-                    std::cout << "Mode: plain" << std::endl;
+                    // std::cout << "Mode: plain" << std::endl;
                     return this->parseIndentToken();
                 }
 
@@ -119,7 +119,7 @@ namespace YamlParser
                 }
 
                 if (isIndent(*this->curSymbol)) {
-                    std::cout << "Mode: text" << std::endl;
+                    // std::cout << "Mode: text" << std::endl;
                     token = this->parseIndentToken();
                     if (((IOBuffer::IOMemoryBuffer*) token->getReader())->length() <= this->lastIndent) {
                         this->moveToMode(STREAM_MODE_PLAIN);
@@ -135,7 +135,7 @@ namespace YamlParser
 
     Token::Token* Stream::parseIndentToken()
     {
-        std::cout << "Call Stream::parseIndentToken()" << std::endl; // todo: remove after debug
+        // std::cout << "Call Stream::parseIndentToken()" << std::endl; // todo: remove after debug
 
         Token::Token *token = NULL;
         IOBuffer::IOMemoryBuffer* ioWriter;
@@ -143,20 +143,20 @@ namespace YamlParser
 
         int curLine = this->currentLine, curColumn = this->currentColumn;
 
-        std::cout << "Coords: (" << curLine << "; " << curColumn << ")" << std::endl;
+        // std::cout << "Coords: (" << curLine << "; " << curColumn << ")" << std::endl;
 
-        std::cout << "Spaces: ";
+        // std::cout << "Spaces: ";
 
         while (isIndent(*this->curSymbol)) {
-            std::cout << (int) *this->curSymbol << " ";
+            // std::cout << (int) *this->curSymbol << " ";
             ioWriter->write(this->curSymbol, 1);
             this->curSymbol = this->getNextChar();
         }
 
-        std::cout << (int) *this->curSymbol << " ";
-        std::cout << " [ " << this->curSymbol[0] << " ]";
+        // std::cout << (int) *this->curSymbol << " ";
+        // std::cout << " [ " << this->curSymbol[0] << " ]";
 
-        std::cout << std::endl;
+        // std::cout << std::endl;
 
         token = new Token::Indent(curLine, curColumn, ioWriter);
         return token;
@@ -164,7 +164,7 @@ namespace YamlParser
 
     Token::Token* Stream::parsePropertyToken()
     {
-        std::cout << "Call Stream::parsePropertyToken()" << std::endl; // todo: remove after debug
+        // std::cout << "Call Stream::parsePropertyToken()" << std::endl; // todo: remove after debug
 
         int tokenLine = this->currentLine;
         int tokenColumn = this->currentColumn - 1;
@@ -177,7 +177,7 @@ namespace YamlParser
         IOBuffer::IOMemoryBuffer* ioWriter;
         ioWriter = new IOBuffer::IOMemoryBuffer(32);
 
-        std::cout << "Parse property: "; // todo: remove after debug
+        // std::cout << "Parse property: "; // todo: remove after debug
 
         bool colon = false;
 
@@ -206,7 +206,7 @@ namespace YamlParser
             this->curSymbol = this->getNextChar();
         }
 
-        std::cout << std::endl; // todo: remove after debug
+        // std::cout << std::endl; // todo: remove after debug
 
         token = new Token::PropertyToken(tokenLine, tokenColumn, ioWriter);
         this->moveToMode(STREAM_MODE_VALUE);
@@ -215,7 +215,7 @@ namespace YamlParser
 
     Token::Token* Stream::parsePlainValueToken()
     {
-        std::cout << "Call Stream::parsePlainValueToken()" << std::endl; // todo: remove after debug
+        // std::cout << "Call Stream::parsePlainValueToken()" << std::endl; // todo: remove after debug
 
         int tokenLine = this->currentLine;
         int tokenColumn = this->currentColumn;
@@ -226,15 +226,15 @@ namespace YamlParser
         IOBuffer::IOMemoryBuffer* ioMemoryBuffer;
         ioMemoryBuffer = new IOBuffer::IOMemoryBuffer(16);
 
-        std::cout << "Parse value: "; // todo: remove after debug
+        // std::cout << "Parse value: "; // todo: remove after debug
 
         while (this->curSymbol != NULL && *this->curSymbol != 0x0A && *this->curSymbol != 0x0D) {
-            std::cout << this->curSymbol[0]; // todo: remove after debug
+            // std::cout << this->curSymbol[0]; // todo: remove after debug
             ioMemoryBuffer->write(this->curSymbol, 1);
             this->curSymbol = this->getNextChar();
         }
 
-        std::cout << std::endl; // todo: remove after debug
+        // std::cout << std::endl; // todo: remove after debug
 
         token = new Token::PlainValueToken(tokenLine, tokenColumn, ioMemoryBuffer);
         return token;
@@ -242,7 +242,7 @@ namespace YamlParser
 
     Token::Token* Stream::parseArrayElementToken()
     {
-        std::cout << "Call Stream::parseArrayElementToken()" << std::endl; // todo: remove after debug
+        // std::cout << "Call Stream::parseArrayElementToken()" << std::endl; // todo: remove after debug
 
         int tokenLine = this->currentLine;
         int tokenColumn = this->currentColumn - 1;
@@ -253,12 +253,12 @@ namespace YamlParser
         IOBuffer::IOMemoryBuffer* ioMemoryBuffer;
         ioMemoryBuffer = new IOBuffer::IOMemoryBuffer(16);
 
-        std::cout << "Parse value: "; // todo: remove after debug
+        // std::cout << "Parse value: "; // todo: remove after debug
 
         bool colon = false;
 
         while (this->curSymbol != NULL && *this->curSymbol != 0x0A && *this->curSymbol != 0x0D) {
-            std::cout << this->curSymbol[0]; // todo: remove after debug
+            // std::cout << this->curSymbol[0]; // todo: remove after debug
 
             if (*this->curSymbol == ':') {
                 if (colon) {
@@ -283,7 +283,7 @@ namespace YamlParser
             this->curSymbol = this->getNextChar();
         }
 
-        std::cout << std::endl; // todo: remove after debug
+        // std::cout << std::endl; // todo: remove after debug
 
         if (colon) {
             token = new Token::PropertyToken(tokenLine, tokenColumn, ioMemoryBuffer);
