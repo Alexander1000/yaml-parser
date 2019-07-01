@@ -23,8 +23,6 @@ namespace YamlParser
 
     Token::Token* Stream::getNextToken()
     {
-        // std::cout << "Call Stream::getNextToken()" << std::endl;
-
         if (this->curSymbol == NULL) {
             this->curSymbol = this->getNextChar();
         }
@@ -60,7 +58,6 @@ namespace YamlParser
                 }
 
                 if (isIndent(*this->curSymbol)) {
-                    // std::cout << "Mode: plain" << std::endl;
                     return this->parseIndentToken();
                 }
 
