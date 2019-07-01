@@ -162,8 +162,6 @@ namespace YamlParser
         bool colon = false;
 
         while (this->curSymbol != NULL && *this->curSymbol != 0x0A && *this->curSymbol != 0x0D) {
-            std::cout << this->curSymbol[0]; // todo: remove after debug
-
             if (*this->curSymbol == ':') {
                 if (colon) {
                     ioWriter->write(this->curSymbol-1, 1);
