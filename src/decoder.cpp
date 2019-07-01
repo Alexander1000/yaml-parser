@@ -29,10 +29,7 @@ namespace YamlParser
 
     Element* Decoder::parse_element()
     {
-        // std::cout << "Call Decoder::parse_element()" << std::endl;
-
         Token::Token* token = NULL;
-        // Token::Token* forwardToken = NULL;
         token = this->getNextToken();
 
         if (token == NULL) {
@@ -48,13 +45,10 @@ namespace YamlParser
 
         switch (token->getType()) {
             case Token::Type::Property:
-                // std::cout << "Call Decoder::parse_element() [property]" << std::endl;
-
                 object = this->parse_object(token);
                 element = new Element(ElementType::ObjectType, object);
                 break;
             case Token::Type::PlainValue:
-                // std::cout << "Call Decoder::parse_element() [plain.value]" << std::endl;
 
                 plainValue = (char*) malloc(1001 * sizeof(char));
                 memset(plainValue, 0, sizeof(char) * 1001);
@@ -63,7 +57,6 @@ namespace YamlParser
                 element = new Element(ElementType::PlainTextType, strValue);
                 break;
             case Token::Type::Space:
-                // std::cout << "Call Decoder::parse_element() [space]" << std::endl;
                 memoryBuffer = (IOBuffer::IOMemoryBuffer*) token->getReader();
 
                 if (this->indent->back() == memoryBuffer->length()) {
@@ -85,11 +78,9 @@ namespace YamlParser
                 this->indentArray->pop();
                 break;
             default:
-                // std::cout << "Unexpected token type: " << Token::tokenTypeName(token->getType()) << std::endl;
                 throw new UnexpectedTokenException;
         }
 
-        // std::cout << "Return Decoder::parse_element() [" << Token::tokenTypeName(token->getType()) << "]" << std::endl;
         return element;
     }
 
@@ -100,24 +91,18 @@ namespace YamlParser
 
     std::map<std::string, Element*>* Decoder::parse_object(Token::Token* token)
     {
-        // std::cout << "Decoder::parse_object()" << std::endl;
-        // std::cout << "Current Indent: " << this->indent->back() << std::endl;
-
         std::map<std::string, Element*>* object;
         object = new std::map<std::string, Element*>;
         char* propertyName;
 
         PARSE_PAIR:
         if (token == NULL || token->getType() != Token::Type::Property) {
-            // std::cout << "Unexpected token type: " << Token::tokenTypeName(token->getType()) << std::endl;
             throw new UnexpectedTokenException;
         }
 
         propertyName = (char*) malloc(sizeof(char) * 1001);
         memset(propertyName, 0, 1001 * sizeof(char));
         token->getReader()->read(propertyName, 1000);
-
-        // std::cout << "property.name: " << propertyName << std::endl;
 
         Element* element = this->parse_element();
 
@@ -136,10 +121,7 @@ namespace YamlParser
                     this->tokenStack->push(token);
                     break;
                 case Token::Type::Space:
-                    // std::cout << "indent in property" << std::endl;
                     memoryBuffer = (IOBuffer::IOMemoryBuffer*) token->getReader();
-                    // std::cout << "length indent: " << memoryBuffer->length() << std::endl;
-                    // std::cout << "parent length: " << this->indent->back() << std::endl;
 
                     if (memoryBuffer->length() == this->indent->back()) {
                         Token::Token* forwardToken = this->getNextToken();
@@ -162,15 +144,11 @@ namespace YamlParser
             }
         }
 
-        // this->indent->pop_back();
         return object;
     }
 
     std::list<Element*>* Decoder::parse_array()
     {
-        // std::cout << "Decoder::parse_array()" << std::endl;
-        // std::cout << "Current Indent: " << this->indent->back() << std::endl;
-
         std::list<Element*>* elementList = NULL;
         elementList = new std::list<Element*>;
         Token::Token* token = NULL;
@@ -180,7 +158,6 @@ namespace YamlParser
         // hack for nested objects with custom indent
         token = this->getNextToken();
         if (token->getType() == Token::Type::Property) {
-            // std::cout << "Hack shift indent: " << token->getColumn() << std::endl;
             this->indent->push_back(token->getColumn());
             isNested = true;
         }
@@ -212,8 +189,6 @@ namespace YamlParser
 
             this->tokenStack->push(token);
         }
-
-        // std::cout << "Size list: " << elementList->size() << std::endl;
 
         return elementList;
     }
