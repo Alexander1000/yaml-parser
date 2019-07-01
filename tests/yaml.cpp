@@ -200,6 +200,7 @@ CppUnitTest::TestCase* testDecodeArray_YamlDataWithArray_Positive()
     YamlParser::Element* elSkills01 = oMartin->at("skills");
     assertElementType(t, elSkills01, YamlParser::ElementType::ListType);
     YamlArray* aSkills01 = (YamlArray*) elSkills01->getData();
+    CppUnitTest::assertEquals(t, aSkills01->size(), 3);
     YamlArray::iterator itSkills01 = aSkills01->begin();
 
     YamlParser::Element* elMartinSkill01 = *itSkills01;
@@ -224,6 +225,36 @@ CppUnitTest::TestCase* testDecodeArray_YamlDataWithArray_Positive()
     assertElementType(t, elEmployee02, YamlParser::ElementType::ObjectType);
     YamlObject* oEmployee02 = (YamlObject*) elEmployee02->getData();
     assertObjectPropertyExist(t, oEmployee02, "tabitha");
+
+    YamlParser::Element* elTabitha = oEmployee02->at("tabitha");
+    assertElementType(t, elTabitha, YamlParser::ElementType::ObjectType);
+    YamlObject* oTabitha = (YamlObject*) elTabitha->getData();
+
+    assertObjectPropertyValue(t, oTabitha, "name", "Tabitha Bitumen");
+    assertObjectPropertyValue(t, oTabitha, "job", "Developer");
+    assertObjectPropertyExist(t, oTabitha, "skills");
+
+    YamlParser::Element* elSkills02 = oTabitha->at("skills");
+    assertElementType(t, elSkills02, YamlParser::ElementType::ListType);
+    YamlArray* aSkills02 = (YamlArray*) elSkills02->getData();
+    CppUnitTest::assertEquals(t, aSkills02->size(), 3);
+    YamlArray::iterator itSkills02 = aSkills02->begin();
+
+    YamlParser::Element* elTabithaSkill01 = *itSkills02;
+    assertElementType(t, elTabithaSkill01, YamlParser::ElementType::PlainTextType);
+    CppUnitTest::assertEquals(t, (std::string*) elTabithaSkill01->getData(), "lisp");
+
+    itSkills02++;
+
+    YamlParser::Element* elTabithaSkill02 = *itSkills02;
+    assertElementType(t, elTabithaSkill02, YamlParser::ElementType::PlainTextType);
+    CppUnitTest::assertEquals(t, (std::string*) elTabithaSkill02->getData(), "fortran");
+
+    itSkills02++;
+
+    YamlParser::Element* elTabithaSkill03 = *itSkills02;
+    assertElementType(t, elTabithaSkill03, YamlParser::ElementType::PlainTextType);
+    CppUnitTest::assertEquals(t, (std::string*) elTabithaSkill03->getData(), "erlang");
 
     t->finish();
     return t;
