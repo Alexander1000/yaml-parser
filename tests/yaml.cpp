@@ -197,6 +197,27 @@ CppUnitTest::TestCase* testDecodeArray_YamlDataWithArray_Positive()
     assertObjectPropertyValue(t, oMartin, "job", "Developer");
     assertObjectPropertyExist(t, oMartin, "skills");
 
+    YamlParser::Element* elSkills01 = oMartin->at("skills");
+    assertElementType(t, elSkills01, YamlParser::ElementType::ListType);
+    YamlArray* aSkills01 = (YamlArray*) elSkills01->getData();
+    YamlArray::iterator itSkills01 = aSkills01->begin();
+
+    YamlParser::Element* elMartinSkill01 = *itSkills01;
+    assertElementType(t, elMartinSkill01, YamlParser::ElementType::PlainTextType);
+    CppUnitTest::assertEquals(t, (std::string*) elMartinSkill01->getData(), "python");
+
+    itSkills01++;
+
+    YamlParser::Element* elMartinSkill02 = *itSkills01;
+    assertElementType(t, elMartinSkill02, YamlParser::ElementType::PlainTextType);
+    CppUnitTest::assertEquals(t, (std::string*) elMartinSkill02->getData(), "perl");
+
+    itSkills01++;
+
+    YamlParser::Element* elMartinSkill03 = *itSkills01;
+    assertElementType(t, elMartinSkill03, YamlParser::ElementType::PlainTextType);
+    CppUnitTest::assertEquals(t, (std::string*) elMartinSkill03->getData(), "pascal");
+
     itArray++;
 
     YamlParser::Element* elEmployee02 = *itArray;
