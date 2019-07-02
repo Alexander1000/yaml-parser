@@ -262,10 +262,10 @@ CppUnitTest::TestCase* testDecodeArray_YamlDataWithArray_Positive()
 
 CppUnitTest::TestCase* testDecodeObject_YamlData_Positive()
 {
-    CppUnitTest::TestCase* t = new CppUnitTest::TestCase("002-sample-data");
+    CppUnitTest::TestCase* t = new CppUnitTest::TestCase("004-sample-data");
     t->printTitle();
 
-    IOBuffer::IOFileReader fileReader("../fixtures/002-sample-data.yaml");
+    IOBuffer::IOFileReader fileReader("../fixtures/004-sample-data.yaml");
     IOBuffer::CharStream charStream(&fileReader);
     YamlParser::Stream yamlStream(&charStream);
     YamlParser::Decoder decoder(&yamlStream);
@@ -429,29 +429,29 @@ int main(int argc, char** argv)
 
     testSuite.printTotal();
 
-    std::cout << "==========================" << std::endl;
-
-    IOBuffer::IOFileReader fileReader("../fixtures/001-sample-data.yaml");
-    IOBuffer::CharStream charStream(&fileReader);
-    YamlParser::Stream yamlStream(&charStream);
-    YamlParser::Token::Token* token = NULL;
-
-    char* buffer = (char*) malloc(sizeof(char) * 1001);
-
-    do {
-        token = yamlStream.getNextToken();
-        if (token != NULL) {
-            std::cout << "Type: " << token->getType() << std::endl;
-
-            IOBuffer::IOReader* reader = token->getReader();
-
-            if (reader != NULL) {
-                memset(buffer, 1001, sizeof(char));
-                reader->read(buffer, 1000);
-                std::cout << "Token: " << buffer << std::endl;
-            }
-        }
-    } while(token != NULL);
+//    std::cout << "==========================" << std::endl;
+//
+//    IOBuffer::IOFileReader fileReader("../fixtures/001-sample-data.yaml");
+//    IOBuffer::CharStream charStream(&fileReader);
+//    YamlParser::Stream yamlStream(&charStream);
+//    YamlParser::Token::Token* token = NULL;
+//
+//    char* buffer = (char*) malloc(sizeof(char) * 1001);
+//
+//    do {
+//        token = yamlStream.getNextToken();
+//        if (token != NULL) {
+//            std::cout << "Type: " << token->getType() << std::endl;
+//
+//            IOBuffer::IOReader* reader = token->getReader();
+//
+//            if (reader != NULL) {
+//                memset(buffer, 1001, sizeof(char));
+//                reader->read(buffer, 1000);
+//                std::cout << "Token: " << buffer << std::endl;
+//            }
+//        }
+//    } while(token != NULL);
 
     return 0;
 }

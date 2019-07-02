@@ -82,6 +82,7 @@ namespace YamlParser
                 if (*this->curSymbol == '|') {
                     this->moveToMode(STREAM_MODE_TEXT_PLAIN);
                     token = new Token::PipeToken(this->currentLine, this->currentColumn, NULL);
+                    this->curSymbol = this->getNextChar();
                     return token;
                 }
 
@@ -106,13 +107,13 @@ namespace YamlParser
                 return this->parseArrayElementToken();
 
             case STREAM_MODE_TEXT_PLAIN:
-                while (this->curSymbol != NULL && isIndent(*this->curSymbol)) {
-                    // skip empty strings
-                    this->curSymbol = this->getNextChar();
-                }
                 while (this->curSymbol != NULL && (*this->curSymbol == 0x0A || *this->curSymbol == 0x0D)) {
                     // skip empty strings
                     this->curSymbol = this->getNextChar();
+                }
+
+                if (this->curSymbol == NULL) {
+                    return NULL;
                 }
 
                 if (isIndent(*this->curSymbol)) {

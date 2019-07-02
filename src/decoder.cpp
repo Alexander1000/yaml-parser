@@ -77,6 +77,10 @@ namespace YamlParser
                 }
                 this->indentArray->pop();
                 break;
+            case Token::Type::Pipe:
+                strValue = this->parse_text();
+                element = new Element(ElementType::PlainTextType, strValue);
+                break;
             default:
                 throw new UnexpectedTokenException;
         }
@@ -191,6 +195,99 @@ namespace YamlParser
         }
 
         return elementList;
+    }
+
+    std::string* Decoder::parse_text()
+    {
+        Token::Token* token = NULL;
+        int textIndent = 0;
+        IOBuffer::IOMemoryBuffer* memoryBuffer;
+        bool firstBlock = true;
+        std::list<std::string*> textBlocks;
+        char* buffer;
+
+        PARSE_TEXT_BLOCK:
+        token = this->getNextToken();
+        if (token == NULL) {
+            return NULL;
+        }
+        if (token->getType() != Token::Type::Space) {
+            throw new UnexpectedTokenException;
+        }
+        memoryBuffer = (IOBuffer::IOMemoryBuffer*) token->getReader();
+        if (firstBlock) {
+            if (memoryBuffer->length() <= this->indent->back()) {
+                throw new UnexpectedTokenException;
+            }
+            firstBlock = false;
+            textIndent = memoryBuffer->length();
+        } else {
+            if (memoryBuffer->length() <= this->indent->back()) {
+                this->tokenStack->push(token);
+                return this->assemble_text(&textBlocks, textIndent);
+            }
+        }
+        if (textIndent > memoryBuffer->length()) {
+            textIndent = memoryBuffer->length();
+        }
+
+        token = this->getNextToken();
+        if (token == NULL) {
+            return this->assemble_text(&textBlocks, textIndent);
+        }
+
+        if (token->getType() != Token::Type::PlainValue) {
+            throw new UnexpectedTokenException;
+        }
+
+        buffer = (char*) malloc(sizeof(char) * 1001);
+        memset(buffer, 0, sizeof(char) * 1001);
+        token->getReader()->read(buffer, 1000);
+
+        std::string newStr(buffer);
+        textBlocks.emplace_back(&newStr);
+
+        token = this->getNextToken();
+        if (token == NULL) {
+            return this->assemble_text(&textBlocks, textIndent);
+        }
+
+        if (token->getType() == Token::Type::Space) {
+            this->tokenStack->push(token);
+            goto PARSE_TEXT_BLOCK;
+        }
+
+        throw new UnexpectedTokenException;
+    }
+
+    std::string* Decoder::assemble_text(std::list<std::string*>* textBlocks, int textIndent)
+    {
+        if (textBlocks == NULL) {
+            return NULL;
+        }
+
+        std::string* text;
+        text = new std::string;
+        int size = textBlocks->size();
+
+        int textSize = 0;
+
+        std::list<std::string*>::iterator iTextBlocks = textBlocks->begin();
+        while (iTextBlocks != textBlocks->end()) {
+            textSize += (*iTextBlocks)->length();
+            iTextBlocks++;
+        }
+
+        std::cout << "Text size: " << textSize << std::endl;
+
+        for (int i = 0; i < size; i++) {
+            std::string* textBlock = textBlocks->front();
+            textBlocks->pop_front();
+        }
+
+        std::cout << "Str: " << text << std::endl;
+
+        return text;
     }
 
     Token::Token* Decoder::getNextToken()

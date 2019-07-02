@@ -29,6 +29,8 @@ namespace YamlParser
         std::map<std::string, Element*>* parse_object();
         std::map<std::string, Element*>* parse_object(Token::Token* token);
         std::list<Element*>* parse_array();
+        std::string* parse_text();
+        std::string* assemble_text(std::list<std::string*>* textBlocks, int textIndent);
     };
 }
 
