@@ -285,6 +285,8 @@ namespace YamlParser
             std::string* textBlock = textBlocks->front();
             textBlocks->pop_front();
 
+            std::cout << "Line[" << i << "]: " << textBlock->c_str() << std::endl;
+
             memcpy(textBuffer + offset, textBlock->c_str(), textBlock->length());
             offset += textBlock->length();
         }
