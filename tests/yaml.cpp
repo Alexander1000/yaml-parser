@@ -410,8 +410,8 @@ CppUnitTest::TestCase* testDecodeObject_YamlData_Positive()
     CppUnitTest::assertEquals(t, (std::string*) elUserDataArray05->getData(), "test4");
 
     assertObjectPropertyValue(t, oUserData, "someProperty", "fasfs");
-    assertObjectPropertyExist(t, oUserData, "test");
-    assertObjectPropertyExist(t, oUserData, "lklk");
+    assertObjectPropertyValue(t, oUserData, "test", "kllk\nklk;k;:");
+    assertObjectPropertyValue(t, oUserData, "lklk", "342fs");
 
     assertObjectPropertyExist(t, rObj, "someTest");
 

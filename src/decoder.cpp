@@ -271,7 +271,7 @@ namespace YamlParser
             iTextBlocks++;
         }
 
-        textSize++;
+        textSize += size + 1;
         char* textBuffer = (char*) malloc(sizeof(char) * textSize);
         memset(textBuffer, 0, sizeof(char) * textSize);
 
@@ -282,6 +282,10 @@ namespace YamlParser
             textBlocks->pop_front();
 
             memcpy(textBuffer + offset, textBlock->c_str(), textBlock->length());
+            if (i != size - 1) {
+                textBuffer[offset + textBlock->length()] = '\n';
+                offset++;
+            }
             offset += textBlock->length();
         }
 
