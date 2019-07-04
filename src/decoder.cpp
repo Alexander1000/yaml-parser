@@ -239,8 +239,9 @@ namespace YamlParser
         memset(buffer, 0, sizeof(char) * 1001);
         token->getReader()->read(buffer, 1000);
 
-        std::string newStr(buffer);
-        textBlocks->emplace_back(&newStr);
+        std::string* newStr;
+        newStr = new std::string(buffer);
+        textBlocks->push_back(newStr);
 
         token = this->getNextToken();
         if (token == NULL) {
@@ -261,10 +262,7 @@ namespace YamlParser
             return NULL;
         }
 
-        std::string* text;
-        text = new std::string;
         int size = textBlocks->size();
-
         int textSize = 0;
 
         std::list<std::string*>::iterator iTextBlocks = textBlocks->begin();
@@ -273,11 +271,9 @@ namespace YamlParser
             iTextBlocks++;
         }
 
+        textSize++;
         char* textBuffer = (char*) malloc(sizeof(char) * textSize);
         memset(textBuffer, 0, sizeof(char) * textSize);
-
-        std::cout << "Text size: " << textSize << std::endl;
-        std::cout << "Text block size: " << textBlocks->size() << std::endl;
 
         int offset = 0;
 
@@ -285,14 +281,12 @@ namespace YamlParser
             std::string* textBlock = textBlocks->front();
             textBlocks->pop_front();
 
-            std::cout << "Line[" << i << "]: " << textBlock->c_str() << std::endl;
-
             memcpy(textBuffer + offset, textBlock->c_str(), textBlock->length());
             offset += textBlock->length();
         }
 
-        std::cout << "Str: " << textBuffer << std::endl;
-
+        std::string* text;
+        text = new std::string(textBuffer);
         return text;
     }
 
