@@ -286,8 +286,6 @@ CppUnitTest::TestCase* testDecodeObject_YamlData_Positive()
     assertElementType(t, elUserData, YamlParser::ElementType::ObjectType);
     YamlObject* oUserData = (YamlObject*) elUserData->getData();
 
-    // todo: assert each property
-
     assertObjectPropertyValue(t, oUserData, "name", "Alexander");
     assertObjectPropertyValue(t, oUserData, "birth.date", "28.08.1990");
     assertObjectPropertyValue(t, oUserData, "some/info", "'Test Information'");
@@ -345,8 +343,6 @@ CppUnitTest::TestCase* testDecodeObject_YamlData_Positive()
     YamlObject* oUserDataObject04 = (YamlObject*) elUserDataArray04->getData();
     assertObjectPropertyValue(t, oUserDataObject04, "name", "ob1");
     assertObjectPropertyValue(t, oUserDataObject04, "property", "holla");
-
-    // todo: assert: someValue nested
 
     assertObjectPropertyExist(t, oUserDataObject04, "someValue");
     YamlParser::Element* elUserDataSomeValue = oUserDataObject04->at("someValue");
@@ -414,8 +410,10 @@ CppUnitTest::TestCase* testDecodeObject_YamlData_Positive()
     assertObjectPropertyValue(t, oUserData, "lklk", "342fs");
 
     assertObjectPropertyExist(t, rObj, "someTest");
-
-    // todo: assert
+    YamlParser::Element* elSomeTest = rObj->at("someTest");
+    assertElementType(t, elSomeTest, YamlParser::ElementType::ObjectType);
+    YamlObject* oSomeTest = (YamlObject*) elSomeTest->getData();
+    assertObjectPropertyValue(t, oSomeTest, "val", "key");
 
     t->finish();
     return t;
@@ -434,30 +432,6 @@ int main(int argc, char** argv)
     testSuite.addTestCase(testDecodeObject_YamlData_Positive());
 
     testSuite.printTotal();
-
-//    std::cout << "==========================" << std::endl;
-//
-//    IOBuffer::IOFileReader fileReader("../fixtures/001-sample-data.yaml");
-//    IOBuffer::CharStream charStream(&fileReader);
-//    YamlParser::Stream yamlStream(&charStream);
-//    YamlParser::Token::Token* token = NULL;
-//
-//    char* buffer = (char*) malloc(sizeof(char) * 1001);
-//
-//    do {
-//        token = yamlStream.getNextToken();
-//        if (token != NULL) {
-//            std::cout << "Type: " << token->getType() << std::endl;
-//
-//            IOBuffer::IOReader* reader = token->getReader();
-//
-//            if (reader != NULL) {
-//                memset(buffer, 1001, sizeof(char));
-//                reader->read(buffer, 1000);
-//                std::cout << "Token: " << buffer << std::endl;
-//            }
-//        }
-//    } while(token != NULL);
 
     return 0;
 }
