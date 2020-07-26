@@ -42,6 +42,8 @@ target_include_directories(${PROJECT_NAME} PRIVATE src)
 find_library(IO_BUFFER libio-buffer.a)
 message(STATUS "Found io-buffer library: ${IO_BUFFER}")
 
+include_directories(/usr/local/include)
+
 target_link_libraries(${PROJECT_NAME} ${IO_BUFFER})
 
 install (TARGETS ${PROJECT_NAME}

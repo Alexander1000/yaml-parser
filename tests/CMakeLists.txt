@@ -27,6 +27,8 @@ message(STATUS "Found io-buffer library: ${IO_BUFFER}")
 find_library(CPP_UNIT_TEST libcpp-unit-test.a)
 message(STATUS "Found cpp-unit-test: ${CPP_UNIT_TEST}")
 
+include_directories(/usr/local/include)
+
 add_executable(
     ${PROJECT_NAME} yaml.cpp
     ${YAML_PARSER_SOURCES}
