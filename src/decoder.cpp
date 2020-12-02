@@ -3,6 +3,7 @@
 #include <string>
 #include <list>
 #include <stack>
+#include <memory.h>
 
 #include <yaml-parser/decoder.h>
 #include <yaml-parser/stream.h>

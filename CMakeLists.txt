@@ -36,7 +36,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER include/yaml-pars
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "yaml-parser")
 set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS -fPIC)
 
-target_include_directories(${PROJECT_NAME} PRIVATE include)
+target_include_directories(${PROJECT_NAME} PUBLIC include)
 target_include_directories(${PROJECT_NAME} PRIVATE src)
 
 find_library(IO_BUFFER libio-buffer.a)
@@ -47,7 +47,8 @@ include_directories(/usr/local/include)
 target_link_libraries(${PROJECT_NAME} ${IO_BUFFER})
 
 install (TARGETS ${PROJECT_NAME}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib
+    PUBLIC_HEADER DESTINATION include
     COMPONENT library
 )
